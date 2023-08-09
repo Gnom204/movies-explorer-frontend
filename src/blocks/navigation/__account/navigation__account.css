@@ -1,0 +1,20 @@
+.navigation__account {
+    color: black;
+    text-decoration: none;
+    border-radius: 50px;
+    padding: 6px 11px;
+    font-size: 14px;
+    border: 2px solid #AAA;
+}
+
+.navigation__account::before {
+    content: url(../../../images/human.png);
+    margin-right: 7px;
+}
+
+@media screen and (max-width:768px) {
+    .navigation__account {
+        display: none;
+        margin: 0 0 90px 0;
+    }
+}

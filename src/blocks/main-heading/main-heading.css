@@ -1,0 +1,12 @@
+.main-heading {
+    font-size: 50px;
+    max-width: 720px;
+    margin: 0;
+    font-weight: 500;
+}
+
+@media screen and (max-width:564px) {
+    .main-heading {
+        font-size: 31px;
+    }
+}

@@ -1,0 +1,4 @@
+.movieCardList {
+    display: flex;
+    flex-direction: column;
+}

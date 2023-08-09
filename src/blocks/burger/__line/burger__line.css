@@ -1,0 +1,6 @@
+.burger__line {
+    height: 2px;
+    width: 100%;
+    transform: scale(1);
+    background-color: black;
+}

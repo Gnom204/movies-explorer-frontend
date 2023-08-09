@@ -1,0 +1,10 @@
+.App {
+  min-width: 320px;
+  font-family: 'Inter';
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  background-color: #FAFAFA;
+  margin: auto;
+  position: relative;
+}

@@ -1,0 +1,9 @@
+.aboutProject__text {
+    font-size: 14px;
+}
+
+@media screen and (max-width:564px) {
+    .aboutProject__text {
+        font-size: 11px;
+    }
+}

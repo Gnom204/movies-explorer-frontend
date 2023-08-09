@@ -1,0 +1,23 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    /* margin: 21px 70px; */
+    align-items: center;
+    position: absolute;
+    top: 21px;
+    left: 70px;
+    right: 70px;
+}
+
+@media screen and (max-width:768px) {
+    .header {
+        left: 30px;
+        right: 30px;
+    }
+}
+
+@media screen and (max-width:564px) {
+    .header {
+        font-size: 10px;
+    }
+}

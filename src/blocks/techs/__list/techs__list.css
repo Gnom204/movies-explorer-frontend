@@ -1,0 +1,7 @@
+.techs__list {
+    display: flex;
+    list-style-type: none;
+    gap: 10px;
+    padding: 0;
+    flex-wrap: wrap;
+}

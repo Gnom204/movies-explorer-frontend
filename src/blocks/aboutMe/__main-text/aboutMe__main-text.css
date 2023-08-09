@@ -1,0 +1,10 @@
+.aboutMe__main-text {
+    margin: 0 49px 0 0;
+}
+
+@media screen and (max-width:564px) {
+    .aboutMe__main-text {
+        margin: 0;
+        text-align: start;
+    }
+}

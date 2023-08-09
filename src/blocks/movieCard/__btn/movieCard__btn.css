@@ -1,0 +1,16 @@
+.card__btn {
+    width: 16px;
+    height: 16px;
+}
+
+.card__btn::after {
+    content: '';
+    display: block;
+    background-color: #2BE080;
+}
+
+.card__btn::before {
+    content: '';
+    display: block;
+    background-color: #2BE080;
+}

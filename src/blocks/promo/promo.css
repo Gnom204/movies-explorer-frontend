@@ -1,0 +1,9 @@
+.promo {
+    width: 100%;
+    background-color: #DDDEE3;
+    min-height: 664px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}

@@ -1,0 +1,11 @@
+.aboutMe__profession {
+    margin: 18px 0 26px 0;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+@media screen and (max-width:768px) {
+    .aboutMe__profession {
+        font-size: 12px;
+    }
+}

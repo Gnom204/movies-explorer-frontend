@@ -1,0 +1,11 @@
+.navigation__links {
+    display: flex;
+    align-items: center;
+    margin: 0 auto 0 44px;
+}
+
+@media screen and (max-width:768px) {
+    .navigation__links {
+        display: none;
+    }
+}

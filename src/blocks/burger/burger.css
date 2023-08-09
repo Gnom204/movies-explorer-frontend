@@ -1,0 +1,36 @@
+.burger {
+    display: none;
+    position: relative;
+    top: 0;
+    z-index: 50;
+    align-items: center;
+    cursor: pointer;
+    width: 22px;
+    height: 20px;
+    justify-content: flex-end;
+}
+
+.burger::before,
+.burger::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background-color: black;
+    transform: scale(1);
+    transition: all 0.2s ease 0s;
+}
+
+.burger::before {
+    top: 0;
+}
+
+.burger::after {
+    bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .burger {
+        display: flex;
+    }
+}

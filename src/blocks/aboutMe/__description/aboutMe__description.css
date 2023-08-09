@@ -1,0 +1,25 @@
+.aboutMe__description {
+    text-align: justify;
+    font-size: 14px;
+    margin: 0 0 137px 0;
+    max-width: 600px;
+}
+
+@media screen and (max-width:768px) {
+    .aboutMe__description {
+        font-size: 12px;
+        max-width: 364px;
+    }
+}
+
+@media screen and (max-width:564px) {
+    .aboutMe__description {
+        margin: 0 0 40px;
+    }
+}
+
+@media screen and (max-width:348px) {
+    .aboutMe__description {
+        max-width: 292px;
+    }
+}

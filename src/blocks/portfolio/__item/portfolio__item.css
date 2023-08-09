@@ -1,0 +1,15 @@
+.portfolio__item {
+    font-size: 30px;
+}
+
+@media screen and (max-width:768px) {
+    .portfolio__item {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width:564px) {
+    .portfolio__item {
+        font-size: 18px;
+    }
+}

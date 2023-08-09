@@ -1,0 +1,15 @@
+.techs__item {
+    width: 90px;
+    height: 60px;
+    background-color: #E8E8E8;
+    display: flex;
+    margin: auto;
+    border-radius: 10px;
+}
+
+@media screen and (max-width:768px) {
+    .techs__item {
+        width: 84px;
+        height: 57px;
+    }
+}

@@ -1,0 +1,6 @@
+.searchForm__checkbox-container {
+    display: flex;
+    align-items: center;
+    border-left: solid 1px #CBCBCB;
+    height: 40px;
+}

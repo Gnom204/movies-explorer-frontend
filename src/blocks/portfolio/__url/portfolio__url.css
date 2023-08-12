@@ -1,5 +1,5 @@
 .portfolio__url::after {
-    content: url(../../../images/text__COLOR_font-main.png);
+    content: url(../../../images/text__COLOR_font-main.svg);
     float: right;
 }
 

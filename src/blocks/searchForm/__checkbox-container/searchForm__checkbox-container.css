@@ -4,3 +4,10 @@
     border-left: solid 1px #CBCBCB;
     height: 40px;
 }
+
+@media screen and (max-width:564px) {
+    .searchForm__checkbox-container {
+        margin: 46px 0 0 0;
+        border-left: none;
+    }
+}

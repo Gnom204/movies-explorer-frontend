@@ -4,3 +4,9 @@
     max-width: 400px;
     margin: auto;
 }
+
+@media screen and (max-width:464px) {
+    .login {
+        max-width: 260px;
+    }
+}

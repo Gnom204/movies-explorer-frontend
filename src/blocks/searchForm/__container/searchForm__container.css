@@ -8,3 +8,15 @@
     border: none;
     align-items: center;
 }
+
+.searchForm__container:hover {
+    box-shadow: 3px 5px 18px 7px rgba(0, 0, 0, 0.09);
+    transition: all 0.4s ease 0s;
+}
+
+@media screen and (max-width:564px) {
+    .searchForm__container {
+        flex-direction: column;
+        margin: 10px 0 0 0;
+    }
+}

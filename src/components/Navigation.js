@@ -6,9 +6,9 @@ function Navigation(props, items) {
     const handleClick = () => {
         setActive(active => !active);
     }
-    console.log(items)
     return (
         <>
+            <div className={active ? "navigation__overlay" : ""}></div>
             <nav className={`navigation ${active ? "navigation__active" : ""}`}>
                 {props.isLoggedIn ?
                     <>

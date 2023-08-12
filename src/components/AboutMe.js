@@ -1,7 +1,7 @@
 import myPhoto from '../images/pic__COLOR_pic.png'
 function AboutMe() {
     return (
-        <div id='student' className="pageInfo aboutMe">
+        <section id='student' className="pageInfo aboutMe">
             <h2 className="aboutMe__name">Студент</h2>
             <hr className="underline" />
             <div className="aboutMe__info">
@@ -16,7 +16,7 @@ function AboutMe() {
                     <img className="aboutMe__img" alt='Фотография автора' src={myPhoto} />
                 </div>
             </div>
-        </div>
+        </section>
     )
 };
 export default AboutMe;

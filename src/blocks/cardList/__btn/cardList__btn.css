@@ -7,6 +7,7 @@
     font-family: 'Inter-Medium';
     cursor: pointer;
     font-size: 12px;
+    border-radius: 6px;
 }
 
 .cardList__btn:checked::after {

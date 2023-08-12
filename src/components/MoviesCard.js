@@ -8,9 +8,10 @@ function MoviesCard(props) {
             <div className="card__description">
                 <div className="card__container">
                     <span className="card__heading">{props.name}</span>
-                    <label>
+                    {props.saveCard ? <button className="card__btn-dlt" />
+                        :
                         <input value={select} type="radio" name="select" className="card__btn" />
-                    </label>
+                    }
                 </div>
                 <p className="card__timing">{props.time}</p>
             </div>

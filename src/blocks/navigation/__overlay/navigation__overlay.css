@@ -1,0 +1,9 @@
+.navigation__overlay {
+    background-color: black;
+    opacity: 0.3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vh;
+}

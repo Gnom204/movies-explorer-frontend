@@ -1,6 +1,6 @@
 function Techs() {
     return (
-        <div id="techs" className="pageInfo techs">
+        <section id="techs" className="pageInfo techs">
             <h2 className="page__heading">Технологии</h2>
             <hr className="underline" />
             <div className="techs__main">
@@ -30,7 +30,7 @@ function Techs() {
                     </li>
                 </ul>
             </div>
-        </div>
+        </section>
     )
 }
 export default Techs;

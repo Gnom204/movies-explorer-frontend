@@ -8,7 +8,7 @@
 }
 
 .navigation__account::before {
-    content: url(../../../images/human.png);
+    content: url(../../../images/human.svg);
     margin-right: 7px;
 }
 

@@ -9,3 +9,9 @@
     background-color: #FAFAFA;
     align-items: center;
 }
+
+@media screen and (max-width:564px) {
+    .cardList {
+        margin: 0 10px;
+    }
+}

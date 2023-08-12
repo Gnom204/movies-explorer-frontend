@@ -5,3 +5,10 @@
     padding: 0;
     flex-wrap: wrap;
 }
+
+@media screen and (max-width:564px) {
+    .techs__list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}

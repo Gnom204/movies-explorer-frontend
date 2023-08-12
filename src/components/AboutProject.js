@@ -1,6 +1,6 @@
 function AboutProject() {
     return (
-        <div id="about" className=" pageInfo aboutProject">
+        <section id="about" className=" pageInfo aboutProject">
             <h2 className="page__heading">О проекте</h2>
             <hr className="underline" />
             <div className="aboutProject__container">
@@ -25,7 +25,7 @@ function AboutProject() {
                 <span className="aboutProject__progress-backText">Back-end</span>
                 <span className="aboutProject__progress-frontText">Front-end</span>
             </div>
-        </div>
+        </section>
     )
 };
 export default AboutProject;

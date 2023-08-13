@@ -2,3 +2,11 @@
     height: 100vh;
     margin: 70px 0 0 0;
 }
+
+@media screen and (max-width:564px) {
+    .authorization {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}

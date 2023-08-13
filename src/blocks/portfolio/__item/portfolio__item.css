@@ -1,5 +1,10 @@
 .portfolio__item {
     font-size: 30px;
+    padding: 20px 0;
+}
+
+.portfolio__item:not(:last-child) {
+    border-bottom: solid #E8E8E8 1px;
 }
 
 @media screen and (max-width:768px) {

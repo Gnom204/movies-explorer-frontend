@@ -1,0 +1,20 @@
+.portfolio__url::after {
+    content: url(../../../images/text__COLOR_font-main.svg);
+    float: right;
+}
+
+.portfolio__url {
+    text-decoration: none;
+    color: black;
+    font-size: 30px;
+}
+
+@media screen and (max-width:564px) {
+    .portfolio__url {
+        font-size: 18px;
+    }
+
+    .portfolio__url::after {
+        font-size: 18px;
+    }
+}

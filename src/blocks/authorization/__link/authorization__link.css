@@ -1,0 +1,10 @@
+.authorization__link {
+    color: #3456F3;
+    text-decoration: none;
+}
+
+@media screen and (max-width:464px) {
+    .authorization__link {
+        font-size: 12px;
+    }
+}

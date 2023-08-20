@@ -1,0 +1,10 @@
+.aboutProject__progress {
+    display: flex;
+    color: white;
+}
+
+@media screen and (max-width:564px) {
+    .aboutProject__progress {
+        font-size: 11px;
+    }
+}

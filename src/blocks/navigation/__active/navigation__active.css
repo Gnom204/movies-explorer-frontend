@@ -1,0 +1,20 @@
+.navigation__active {
+    height: 100vh;
+    background-color: white;
+    flex-direction: column;
+    width: 520px;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    right: 0;
+    transition: all 0.4s ease-out 0s;
+    overflow: hidden;
+}
+
+@media screen and (max-width:520px) {
+    .navigation__active {
+        width: 320px;
+    }
+}

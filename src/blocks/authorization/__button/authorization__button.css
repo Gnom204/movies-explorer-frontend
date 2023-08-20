@@ -1,0 +1,16 @@
+.authorization__button {
+    padding: 14px 125px;
+    font-size: 14px;
+    background-color: #3456F3;
+    border: none;
+    color: white;
+    margin: 134px 0 0 0;
+    max-width: 396px;
+    border-radius: 3px;
+}
+
+@media screen and (max-width:464px) {
+    .authorization__button {
+        padding: 14px 68px;
+    }
+}

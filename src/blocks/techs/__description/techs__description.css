@@ -1,0 +1,12 @@
+.techs__description {
+    max-width: 460px;
+    text-align: center;
+    margin: 26px 0 100px 0;
+    font-size: 14px;
+}
+
+@media screen and (max-width:564px) {
+    .techs__description {
+        font-size: 11px;
+    }
+}

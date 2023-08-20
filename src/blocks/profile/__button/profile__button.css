@@ -1,0 +1,7 @@
+.profile__button {
+    border: none;
+    background-color: transparent;
+    margin: 0 0 16px;
+    cursor: pointer;
+    font-size: 13px;
+}

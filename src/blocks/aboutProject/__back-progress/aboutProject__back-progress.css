@@ -1,0 +1,8 @@
+.aboutProject__back-progress {
+    background-color: #3456F3;
+    width: 30%;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,15 @@
+.burger__active {
+    position: fixed;
+    top: 22px;
+    right: 22px;
+}
+
+.burger__active::before {
+    top: 50%;
+    transform: rotate(-45deg) translate(0, -50%);
+}
+
+.burger__active::after {
+    bottom: 50%;
+    transform: rotate(45deg) translate(0, 50%);
+}

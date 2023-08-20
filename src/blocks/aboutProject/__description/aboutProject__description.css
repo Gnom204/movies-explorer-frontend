@@ -1,0 +1,7 @@
+.aboutProject__description {
+    max-width: 550px;
+}
+
+.aboutProject__description:nth-child(1) {
+    margin: 0 30px 0 0;
+}

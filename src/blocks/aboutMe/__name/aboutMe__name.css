@@ -1,0 +1,8 @@
+.aboutMe__name {
+    font-family: Inter;
+    font-weight: 500;
+}
+
+@media screen and (max-width:768px) {
+    .aboutMe__name {}
+}

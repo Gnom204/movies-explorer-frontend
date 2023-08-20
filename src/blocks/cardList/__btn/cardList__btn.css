@@ -1,0 +1,16 @@
+.cardList__btn {
+    width: 320px;
+    height: 36px;
+    margin: 80px auto 0;
+    background-color: #F4F4F4;
+    border: none;
+    font-family: 'Inter-Medium';
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.cardList__btn:checked::after {
+    content: '';
+    background-color: #F4F4F4;
+}

@@ -1,0 +1,19 @@
+.pageInfo {
+    margin: 0 70px 100px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FAFAFA;
+}
+
+@media screen and (max-width:768px) {
+    .pageInfo {
+        margin: 0 50px 90px;
+    }
+}
+
+@media screen and (max-width:564px) {
+    .pageInfo {
+        margin: 0 14px 70px;
+        display: block;
+    }
+}

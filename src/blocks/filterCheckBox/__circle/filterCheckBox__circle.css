@@ -1,10 +1,16 @@
 .filterCheckBox__circle {
-    width: 15px;
-    height: 16px;
+    appearance: none;
+    width: 12px;
+    height: 14px;
     background-color: white;
     border-radius: 50%;
-    margin: 2px;
+    border: none;
+    margin: 2px 0 0 0;
     float: left;
     animation: slidein 3s;
     cursor: pointer;
+}
+
+.filterCheckBox__circle:checked {
+    float: right;
 }

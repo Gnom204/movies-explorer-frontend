@@ -88,6 +88,7 @@
 @import url(./blocks/movieCard/__main/movieCard__main.css);
 @import url(./blocks/movieCard/__btn-container/movieCard__btn-container.css);
 @import url(./blocks/movieCard/__btn-dlt/moviecard__btn-dlt.css);
+@import url(./blocks/movieCard/__trailerLink/movieCard__trailerLink.css);
 /* Preloader */
 @import url(./blocks/preloader/Preloader.css);
 /* Authorization */

@@ -1,25 +1,12 @@
-import MoviesCard from "./MoviesCard";
 import MoviesCardList from "./MoviesCardList";
 import SearchForm from "./SearchForm";
 
-function Movie() {
+function Movie({ searchMovies, movies, addFilms, windowSize, isLoading, addFavorite }) {
+
     return (
         <>
-            <SearchForm />
-            {/* <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' /> */}
-            <MoviesCardList>
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-                <MoviesCard link='https://fikiwiki.com/uploads/posts/2022-02/1644855639_6-fikiwiki-com-p-kartinki-khd-kachestva-6.jpg' name='33 слова о дизайне' time='33ч13м' />
-
-            </MoviesCardList>
+            <SearchForm foundFilm={movies} addFilms={addFilms} searchMovies={searchMovies} />
+            <MoviesCardList isSave={false} isLoading={isLoading} windowSize={windowSize} addFavorite={addFavorite} movies={movies} />
         </>
     )
 }

@@ -7,6 +7,7 @@
     margin: 134px 0 0 0;
     max-width: 396px;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 @media screen and (max-width:464px) {

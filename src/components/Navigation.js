@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
 
-function Navigation(props, items) {
+function Navigation(props) {
     const [active, setActive] = useState(false);
     const handleClick = () => {
         setActive(active => !active);

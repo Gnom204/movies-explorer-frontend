@@ -3,4 +3,6 @@
     flex-direction: column;
     margin: 74px auto 0;
     align-items: center;
+    height: 100vh;
+    padding: 72px 0 0 0;
 }

@@ -1,26 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function FilterCheckBox(props) {
     const [color, setColor] = useState('#EBEBEB')
-    const [side, setSide] = useState('left')
     const [click, setClick] = useState(false)
 
-    function onClicked() {
-        click ? setClick(false) : setClick(true);
-        if (side === 'left') {
-            setSide('right');
+    useEffect(() => {
+        if (!click === true) {
             setColor('#2BE080')
         } else {
-            setSide('left')
             setColor('#EBEBEB')
         }
+    }, [click])
+
+    function onClicked() {
+        setClick(!click)
+        props.checkBoxHandler(click)
+        console.log(click)
     }
     return (
-        <div onClick={onClicked} style={{ backgroundColor: color }} className='filterCheckBox'>
-            <div onClick={onClicked} style={{ float: side }} className={"filterCheckBox__circle"}>
+        <label htmlFor="filterCheckbox" onClick={onClicked} style={{ backgroundColor: color }} className='filterCheckBox' >
+            <input type="checkbox" onChange={onClicked} className={"filterCheckBox__circle"} id="filterCheckbox">
 
-            </div>
-        </div >
+            </input>
+        </label >
     )
 }
 export default FilterCheckBox;

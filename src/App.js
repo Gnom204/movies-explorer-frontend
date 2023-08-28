@@ -18,6 +18,7 @@ import { getMovies } from './utils/MovieApi';
 function App() {
   const [searchMovies, setSearchMovies] = useState([])
   const navigation = useNavigate();
+  const [errorText, setErrorText] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('loginStatus') || false);
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('userData')) || {});
   const [foundFilm, setFoundFilm] = useState(JSON.parse(localStorage.getItem('movies')) || [])
@@ -96,12 +97,18 @@ function App() {
   const onLogin = (email, password) => {
     api.login(email, password)
       .then((res) => {
-        setIsLoggedIn(true)
-        setCurrentUser(res.data)
-        localStorage.setItem('loginStatus', true)
-        localStorage.setItem('userData', JSON.stringify(res.data))
-        console.log({ res: res, currentUser: currentUser })
-        navigation('/', { replace: true })
+        if (res.ok) {
+          setIsLoggedIn(true)
+          setCurrentUser(res.data)
+          localStorage.setItem('loginStatus', true)
+          localStorage.setItem('userData', JSON.stringify(res.data))
+          console.log({ res: res, currentUser: currentUser })
+          navigation('/', { replace: true })
+
+        } else {
+          setErrorText('Неверные email или пароль')
+          console.log('неправильно')
+        }
       })
       .catch(err => console.log(err))
   }
@@ -132,7 +139,7 @@ function App() {
             <ProtectedRoute element={Profile} logout={logout} isLoggedIn={isLoggedIn} />
           </>} />
           <Route path='/signup' element={isLoggedIn ? <Navigate to="/" /> : <Register onRegister={onRegister} />} />
-          <Route path='/signin' element={isLoggedIn ? <Navigate to="/" /> : <Login onLogin={onLogin} />} />
+          <Route path='/signin' element={isLoggedIn ? <Navigate to="/" /> : <Login errorText={errorText} onLogin={onLogin} />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>

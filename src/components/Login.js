@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom"
-function Login({ onLogin }) {
+function Login({ onLogin, errorText }) {
     const [email, setEmail] = useState('');
     const [dirtyEmail, setDirtyEmail] = useState(false);
     const [password, setPassword] = useState('');
@@ -45,12 +45,12 @@ function Login({ onLogin }) {
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">E-mail</label>
                         <input onChange={emailHandler} required type="email" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{dirtyEmail ? 'Поле не может быть пустым' : ''}</span>
+                        <span className="authorization__error authorization__validation-error">{dirtyEmail ? 'Поле не может быть пустым' : ''}{errorText}</span>
                     </div>
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">Пароль</label>
                         <input onChange={passwordHandler} required type="password" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{dirtyPassword ? 'Поле не может быть пустым' : ''}</span>
+                        <span className="authorization__error authorization__validation-error">{dirtyPassword ? 'Поле не может быть пустым' : ''}{errorText}</span>
                     </div>
                     <button type="submit" className="authorization__button">Войти</button>
                     <div className="authorization__question-container">

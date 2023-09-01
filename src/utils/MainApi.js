@@ -65,7 +65,7 @@ export const addMovies = ({ country, director, duration, year, description, imag
         })
     })
         .then((res) => {
-            return res.json()
+            return handleError(res)
         })
         .then((data) => {
             console.log(data)
@@ -85,7 +85,7 @@ export const login = (email, password) => {
         })
     })
         .then((res) => {
-            return res.json()
+            return handleError(res)
         })
 }
 

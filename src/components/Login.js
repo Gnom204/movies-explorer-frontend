@@ -1,24 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom"
 function Login({ onLogin, errorText }) {
+    const validator = require('validator');
+
     const [email, setEmail] = useState('');
+    const [errorMessagePassword, setErrorMassegePassword] = useState('')
+    const [errorMessageEmail, setErrorMassegeEmail] = useState('')
     const [dirtyEmail, setDirtyEmail] = useState(false);
     const [password, setPassword] = useState('');
     const [dirtyPassword, setDirtyPassword] = useState(false);
 
     const checkDirtyEmail = (e) => {
         if (e.target.value === '') {
+            setErrorMassegeEmail('Поле не может быть пустым')
             setDirtyEmail(true)
         } else {
             setDirtyEmail(false)
+            setErrorMassegeEmail('')
         }
     }
 
     const checkDirtyPassword = (e) => {
         if (e.target.value === '') {
+            setErrorMassegePassword('Поле не может быть пустым')
             setDirtyPassword(true)
         } else {
             setDirtyPassword(false)
+            setErrorMassegePassword('')
         }
     }
 
@@ -33,8 +41,15 @@ function Login({ onLogin, errorText }) {
     }
 
     const handleSubmit = (e) => {
+        console.log(errorText)
         e.preventDefault();
-        onLogin(email, password);
+        if (validator.isEmail(email)) {
+            onLogin(email, password);
+            setErrorMassegeEmail(errorText)
+            setErrorMassegePassword(errorText)
+        } else if (!validator.isEmail(email)) {
+            setErrorMassegeEmail('email не валиден')
+        }
     }
     return (
         <section className="login">
@@ -45,12 +60,12 @@ function Login({ onLogin, errorText }) {
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">E-mail</label>
                         <input onChange={emailHandler} required type="email" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{dirtyEmail ? 'Поле не может быть пустым' : ''}{errorText}</span>
+                        <span className="authorization__error authorization__validation-error">{errorMessageEmail}</span>
                     </div>
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">Пароль</label>
                         <input onChange={passwordHandler} required type="password" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{dirtyPassword ? 'Поле не может быть пустым' : ''}{errorText}</span>
+                        <span className="authorization__error authorization__validation-error">{errorMessagePassword}</span>
                     </div>
                     <button type="submit" className="authorization__button">Войти</button>
                     <div className="authorization__question-container">

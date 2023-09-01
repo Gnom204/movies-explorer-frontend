@@ -97,20 +97,17 @@ function App() {
   const onLogin = (email, password) => {
     api.login(email, password)
       .then((res) => {
-        if (res.ok) {
-          setIsLoggedIn(true)
-          setCurrentUser(res.data)
-          localStorage.setItem('loginStatus', true)
-          localStorage.setItem('userData', JSON.stringify(res.data))
-          console.log({ res: res, currentUser: currentUser })
-          navigation('/', { replace: true })
-
-        } else {
-          setErrorText('Неверные email или пароль')
-          console.log('неправильно')
-        }
+        setErrorText('')
+        setIsLoggedIn(true)
+        setCurrentUser(res.data)
+        localStorage.setItem('loginStatus', true)
+        localStorage.setItem('userData', JSON.stringify(res.data))
+        console.log({ res: res, currentUser: currentUser })
+        navigation('/movies', { replace: true })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        setErrorText('Неверные логин или пароль')
+      })
   }
 
   return (

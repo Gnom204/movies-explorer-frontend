@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
 function Register({ onRegister }) {
+    const validator = require('validator');
+
     const [name, setName] = useState('');
     const [dirtyName, setDirtyName] = useState(false);
     const [email, setEmail] = useState('');
@@ -49,7 +51,9 @@ function Register({ onRegister }) {
 
     const submitHandler = (e) => {
         e.preventDefault()
-        onRegister(name, email, password)
+        if (validator.isEmail(email)) {
+            onRegister(name, email, password)
+        }
     }
 
     return (

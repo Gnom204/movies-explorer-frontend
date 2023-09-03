@@ -5,7 +5,7 @@ function FilterCheckBox(props) {
     const [click, setClick] = useState(false)
 
     useEffect(() => {
-        if (!click === true) {
+        if (click === true) {
             setColor('#2BE080')
         } else {
             setColor('#EBEBEB')
@@ -14,12 +14,11 @@ function FilterCheckBox(props) {
 
     function onClicked() {
         setClick(!click)
-        props.checkBoxHandler(click)
-        console.log(click)
+        props.checkBoxHandler(!click)
     }
     return (
         <label htmlFor="filterCheckbox" onClick={onClicked} style={{ backgroundColor: color }} className='filterCheckBox' >
-            <input type="checkbox" onChange={onClicked} className={"filterCheckBox__circle"} id="filterCheckbox">
+            <input type="checkbox" checked={click} onChange={onClicked} className={"filterCheckBox__circle"} id="filterCheckbox">
 
             </input>
         </label >

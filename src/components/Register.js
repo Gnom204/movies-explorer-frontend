@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { NavLink } from "react-router-dom"
 function Register({ onRegister }) {
     const validator = require('validator');
 
     const [name, setName] = useState('');
     const [dirtyName, setDirtyName] = useState(false);
+    const [stateBtn, setStateBtn] = useState(false);
     const [email, setEmail] = useState('');
     const [dirtyEmail, setDirtyEmail] = useState(false);
     const [password, setPassword] = useState('');
@@ -13,7 +14,9 @@ function Register({ onRegister }) {
     const checkDirtyEmail = (e) => {
         if (e.target.value === '') {
             setDirtyEmail(true)
+            setStateBtn(true)
         } else {
+            setStateBtn(false)
             setDirtyEmail(false)
         }
     }
@@ -21,7 +24,9 @@ function Register({ onRegister }) {
     const checkDirtyName = (e) => {
         if (e.target.value === '') {
             setDirtyName(true)
+            setStateBtn(true)
         } else {
+            setStateBtn(false)
             setDirtyName(false)
         }
     }
@@ -29,7 +34,9 @@ function Register({ onRegister }) {
     const checkDirtyPassword = (e) => {
         if (e.target.value === '') {
             setDirtyPassword(true)
+            setStateBtn(true)
         } else {
+            setStateBtn(false)
             setDirtyPassword(false)
         }
     }
@@ -62,7 +69,7 @@ function Register({ onRegister }) {
                 <div className="authorization">
                     <NavLink to='/' className="logo" />
                     <h2 className="authorization__welcome">Добро пожаловать!</h2>
-                    <form onSubmit={submitHandler} className="authorization__form">
+                    <form noValidate={true} onSubmit={submitHandler} className="authorization__form">
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">Имя</label>
                             <input value={name} name="name" onChange={nameChangeHandler} required type="text" className="authorization__input" />
@@ -70,7 +77,7 @@ function Register({ onRegister }) {
                         </div>
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">E-mail</label>
-                            <input value={email} name="email" onChange={emailChangeHandler} required type="email" className="authorization__input" />
+                            <input value={email} name="email" onChange={emailChangeHandler} required className="authorization__input" />
                             <span className="authorization__error authorization__validation-error">{dirtyEmail ? 'Поле не может быть пустым' : ''}</span>
                         </div>
                         <div className="authorization__input-container">
@@ -78,7 +85,7 @@ function Register({ onRegister }) {
                             <input value={password} name="password" onChange={passwordChangehandler} required type="password" className="authorization__input" />
                             <span className="authorization__error authorization__validation-error">{dirtyPassword ? 'Поле не может быть пустым' : ''}</span>
                         </div>
-                        <button type="submit" className="authorization__button">Зарегистрироваться</button>
+                        <button disabled={stateBtn} type="submit" className="authorization__button">Зарегистрироваться</button>
                         <div className="authorization__question-container">
                             <span className="authorization__question">Уже зарегистрировались?</span>
                             <NavLink to='/signin' className="authorization__link">Войти</NavLink>

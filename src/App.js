@@ -25,11 +25,20 @@ function App() {
   const [windowSize, setWindowSize] = useState(window.innerWidth)
   const [savedMovies, setSavedMovies] = useState(JSON.parse(localStorage.getItem('savedMovie')) || [])
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'))
     if (userData) {
       setCurrentUser(userData)
     }
+  }, [])
+
+  useEffect(() => {
+    api.getMovies()
+      .then((movies) => {
+        setSavedMovies(movies)
+        console.log(movies)
+      }).catch(err => console.log(err))
   }, [])
 
   useEffect(() => {
@@ -64,15 +73,13 @@ function App() {
   }
 
   const saveFilms = (movie) => {
-    // if (savedMovies.some((savedMovie) => savedMovie.id === movie.id)) {
-    //   const updatedSavedMovies = savedMovies.filter((savedMovie) => savedMovie.id !== movie.id);
-    //   setSavedMovies(updatedSavedMovies);
-    // } else {
-    //   setSavedMovies(movie);
-    // }
+    api.addMovies(movie)
+      .then((film) => {
+        console.log(film)
+      })
+      .catch((err) => console.log(err))
     console.log(movie)
     setSavedMovies([movie])
-    localStorage.setItem('savedMovie', JSON.stringify([movie]))
     console.log('работает')
   }
 

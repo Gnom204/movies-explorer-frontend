@@ -20,8 +20,6 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
         if (checkActive && duration > 40) {
             return false
         } else if (checkActive && duration <= 40) {
-            return duration <= 40
-        } else if (checkActive && inputValue !== '') {
             return duration <= 40 && (nameRU.toLowerCase().includes(inputValue.toLowerCase()) || nameEN.toLowerCase().includes(inputValue.toLowerCase()))
         }
 
@@ -44,6 +42,7 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
 
     const checkBoxHandler = (isChecked) => {
         setCheckActive(isChecked)
+        console.log(isChecked)
     }
 
     return (

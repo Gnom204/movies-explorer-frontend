@@ -12,7 +12,7 @@ export const getMovies = () => {
         credentials: 'include',
     })
         .then((res) => {
-            return res.json()
+            return handleError(res)
         })
         .then((data) => {
             console.log(data)
@@ -37,16 +37,17 @@ export const deleteMovie = (movieId) => {
         credentials: 'include'
     })
         .then((res) => {
-            return res.json()
+            return handleError(res)
         })
         .then((data) => {
             console.log(data)
         })
 }
 
-export const addMovies = ({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, movieId }) => {
+export const addMovies = ({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, id }) => {
     return fetch(BASE_URL + '/movies', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             "Content-Type": "application/json"
         },
@@ -61,7 +62,7 @@ export const addMovies = ({ country, director, duration, year, description, imag
             "nameRU": nameRU,
             "nameEN": nameEN,
             "thumbnail": thumbnail,
-            "movieId": movieId,
+            "movieId": id,
         })
     })
         .then((res) => {
@@ -75,6 +76,7 @@ export const addMovies = ({ country, director, duration, year, description, imag
 export const login = (email, password) => {
     return fetch(BASE_URL + '/signin', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json"
@@ -104,7 +106,7 @@ export const register = (name, email, password) => {
         })
     })
         .then((res) => {
-            return res.json()
+            return handleError(res)
         })
 }
 
@@ -114,7 +116,7 @@ export const signout = () => {
         method: 'POST',
     })
         .then((res) => {
-            return res.json()
+            return handleError(res)
         })
 }
 

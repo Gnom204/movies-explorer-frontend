@@ -73,7 +73,7 @@ function App() {
   }
 
   const saveFilms = (movie) => {
-    api.addMovies(movie)
+    api.addMovies(movie, movie.image.url, movie.image.url)
       .then((film) => {
         console.log(film)
       })

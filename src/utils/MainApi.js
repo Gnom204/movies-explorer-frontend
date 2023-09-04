@@ -44,7 +44,7 @@ export const deleteMovie = (movieId) => {
         })
 }
 
-export const addMovies = ({ country, director, duration, year, description, image, trailerLink, nameRU, nameEN, thumbnail, id }) => {
+export const addMovies = ({ country, director, duration, year, description, nameRU, nameEN, id, trailerLink }, thumbnail, image) => {
     return fetch(BASE_URL + '/movies', {
         method: 'POST',
         credentials: 'include',

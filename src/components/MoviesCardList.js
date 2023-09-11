@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MoviesCard from "./MoviesCard";
 import Preloader from "./Preloader";
 
-function MoviesCardList({ movies, windowSize, isSave, addFavorite, isLoading, movieDelete }) {
+function MoviesCardList({ movies, saveMovies, windowSize, isSave, addFavorite, isLoading, movieDelete }) {
     const [moviesCount, setMoviesCount] = useState(16)
 
     useEffect(() => {
@@ -27,9 +27,8 @@ function MoviesCardList({ movies, windowSize, isSave, addFavorite, isLoading, mo
         return `${hours}ч${minute}м`;
     }
 
-
     const films = movies.slice(0, moviesCount).map((movie, index) => (
-        <MoviesCard saveCard={isSave} index={index} movieDelete={movieDelete} addFavorite={addFavorite} movie={movie} trailerLink={movie.trailerLink} key={movie.id} link={`https://api.nomoreparties.co/${movie.image.url}`} alt={movie.nameRU} name={movie.nameRU} time={getDuration(movie.duration)} />
+        <MoviesCard saveCard={isSave} saveLink={movie.image} index={movie._id} movieDelete={movieDelete} addFavorite={addFavorite} movie={movie} trailerLink={movie.trailerLink} key={movie.id} link={`https://api.nomoreparties.co/${movie.image.url}`} alt={movie.nameRU} name={movie.nameRU} time={getDuration(movie.duration)} />
     ))
 
     return (

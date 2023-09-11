@@ -17,8 +17,8 @@ function FilterCheckBox(props) {
         props.checkBoxHandler(!click)
     }
     return (
-        <label htmlFor="filterCheckbox" onClick={onClicked} style={{ backgroundColor: color }} className='filterCheckBox' >
-            <input type="checkbox" checked={click} onChange={onClicked} className={"filterCheckBox__circle"} id="filterCheckbox">
+        <label htmlFor="filterCheckBox" onClick={onClicked} style={{ backgroundColor: color }} className='filterCheckBox' >
+            <input type="checkbox" name="filterCheckBox" checked={click} onChange={onClicked} className={"filterCheckBox__circle"} id="filterCheckBox">
 
             </input>
         </label >

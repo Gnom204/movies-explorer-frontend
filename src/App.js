@@ -18,6 +18,7 @@ import { getMovies } from './utils/MovieApi';
 function App() {
   const [searchMovies, setSearchMovies] = useState([])
   const navigation = useNavigate();
+  const [newSavedMovies, setNewSavedMovies] = useState([])
   const [errorText, setErrorText] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('loginStatus') || false);
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('userData')) || {});
@@ -37,9 +38,9 @@ function App() {
     api.getMovies()
       .then((movies) => {
         setSavedMovies(movies)
-        console.log(movies)
+        setNewSavedMovies(movies)
       }).catch(err => console.log(err))
-  }, [])
+  }, [setSavedMovies])
 
   useEffect(() => {
     window.addEventListener("resize", handleResize)
@@ -59,8 +60,11 @@ function App() {
   }
 
   const movieDelete = (movieIndex) => {
-    const newSavedMovie = savedMovies.filter((_, index) => index !== movieIndex)
+    api.deleteMovie(movieIndex)
+      .then((complete) => console.log('удалено', complete))
+    const newSavedMovie = savedMovies.filter((movie, index) => movie._id !== movieIndex)
     setSavedMovies(newSavedMovie)
+    setNewSavedMovies(newSavedMovie)
   }
 
   const addFilms = (movie) => {
@@ -72,14 +76,24 @@ function App() {
     }, 1000)
   }
 
+  const test = ({ country, director, duration, year, description, nameRU, nameEN, id, trailerLink }, thumbnail, image) => {
+    console.log({ country, director, duration, year: Number(year), description, nameRU, nameEN, id: id, trailerLink, thumbnail, image: `https://api.nomoreparties.co/${image}` })
+  }
+
+  const searchSaveFilm = (movie) => {
+    setNewSavedMovies(movie)
+    console.log({ saved: savedMovies, newSaved: newSavedMovies, films: saveFilms })
+  }
+
   const saveFilms = (movie) => {
-    api.addMovies(movie, movie.image.url, movie.image.url)
+    console.log(movie)
+    test(movie, movie.image.url, movie.image.url)
+    api.addMovies(movie)
       .then((film) => {
-        console.log(film)
+        // setSavedMovies([...savedMovies, film])
+        setNewSavedMovies([...newSavedMovies, film])
       })
       .catch((err) => console.log(err))
-    console.log(movie)
-    setSavedMovies([movie])
     console.log('работает')
   }
 
@@ -129,13 +143,13 @@ function App() {
           <Route path='/movies' element={
             <>
               <Header isLoggedIn={isLoggedIn} />
-              <ProtectedRoute element={Movie} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={addFilms} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
+              <ProtectedRoute element={Movie} saveMovies={savedMovies} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={addFilms} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
               <Footer />
             </>
           } />
           <Route path='/saved-movies' element={<>
             <Header isLoggedIn={isLoggedIn} />
-            <ProtectedRoute element={SavedMovies} movieDelete={movieDelete} windowSize={windowSize} movies={savedMovies} addFilms={addFilms} saveFilms={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
+            <ProtectedRoute element={SavedMovies} newMovies={savedMovies} movieDelete={movieDelete} windowSize={windowSize} movies={newSavedMovies} addFilms={searchSaveFilm} saveFilms={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
             <Footer />
           </>} />
           <Route path='/profile' element={<>

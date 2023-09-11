@@ -14,9 +14,6 @@ export const getMovies = () => {
         .then((res) => {
             return handleError(res)
         })
-        .then((data) => {
-            console.log(data)
-        })
 }
 
 export const getUserInfo = () => {
@@ -32,19 +29,16 @@ export const getUserInfo = () => {
 }
 
 export const deleteMovie = (movieId) => {
-    return fetch(BASE_URL + `movies/${movieId}`, {
+    return fetch(BASE_URL + `/movies/${movieId}`, {
         method: 'DELETE',
         credentials: 'include'
     })
         .then((res) => {
             return handleError(res)
         })
-        .then((data) => {
-            console.log(data)
-        })
 }
 
-export const addMovies = ({ country, director, duration, year, description, nameRU, nameEN, id, trailerLink }, thumbnail, image) => {
+export const addMovies = ({ country, director, duration, year, description, nameRU, nameEN, id, trailerLink, image }) => {
     return fetch(BASE_URL + '/movies', {
         method: 'POST',
         credentials: 'include',
@@ -55,21 +49,18 @@ export const addMovies = ({ country, director, duration, year, description, name
             "country": country,
             "director": director,
             "duration": duration,
-            "year": year,
+            "year": Number(year),
             "description": description,
-            "image": image,
+            "image": `https://api.nomoreparties.co${image.url}`,
             "trailerLink": trailerLink,
             "nameRU": nameRU,
             "nameEN": nameEN,
-            "thumbnail": thumbnail,
+            "thumbnail": `https://api.nomoreparties.co${image.url}`,
             "movieId": id,
         })
     })
         .then((res) => {
             return handleError(res)
-        })
-        .then((data) => {
-            console.log(data)
         })
 }
 

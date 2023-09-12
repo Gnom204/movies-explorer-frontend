@@ -11,7 +11,7 @@ function MoviesCardList({ movies, saveMovies, windowSize, isSave, addFavorite, i
         } else if (windowSize <= 480) {
             setMoviesCount(5)
         }
-    }, [])
+    }, [windowSize])
 
     const clickHandler = () => {
         if (windowSize <= 4000 && windowSize >= 480) {

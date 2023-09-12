@@ -7,10 +7,12 @@ function Profile({ logout }) {
 
     const changeHandlerName = (e) => {
         setNameValue(e.target.value);
+        console.log(nameValue)
     }
 
     const changeHandlerEmail = (e) => {
         setEmailValue(e.target.value);
+        console.log(emailValue)
     }
 
     return (

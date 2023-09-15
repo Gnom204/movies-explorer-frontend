@@ -40,7 +40,7 @@ function App() {
         setSavedMovies(movies)
         setNewSavedMovies(movies)
       }).catch(err => console.log(err))
-  }, [setSavedMovies])
+  }, [newSavedMovies])
 
   useEffect(() => {
     window.addEventListener("resize", handleResize)

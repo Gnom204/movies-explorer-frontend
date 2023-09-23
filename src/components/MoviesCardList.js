@@ -6,18 +6,22 @@ function MoviesCardList({ movies, saveMovies, windowSize, isSave, addFavorite, i
     const [moviesCount, setMoviesCount] = useState(16)
 
     useEffect(() => {
-        if (windowSize <= 4000 && windowSize > 480) {
+        if (windowSize <= 4000 && windowSize > 768) {
             setMoviesCount(16)
-        } else if (windowSize <= 480) {
+        }
+        if (windowSize <= 480) {
             setMoviesCount(5)
+        }
+        if (windowSize <= 768 && windowSize > 480) {
+            setMoviesCount(8)
         }
     }, [windowSize])
 
     const clickHandler = () => {
-        if (windowSize <= 4000 && windowSize >= 480) {
+        if (windowSize <= 4000 && windowSize >= 768) {
             setMoviesCount(moviesCount + 4)
             console.log(moviesCount)
-        } else if (windowSize <= 480) {
+        } else if (windowSize <= 768) {
             setMoviesCount(moviesCount + 2)
         }
     }
@@ -38,7 +42,9 @@ function MoviesCardList({ movies, saveMovies, windowSize, isSave, addFavorite, i
                     {films}
                 </ul>
             }
-            <button onClick={clickHandler} className="cardList__btn">Ещё</button>
+            {
+                movies.length === 0 || isSave ? false : <button onClick={clickHandler} className="cardList__btn">Ещё</button>
+            }
         </section>
     )
 }

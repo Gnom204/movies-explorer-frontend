@@ -40,7 +40,7 @@ function App() {
         setSavedMovies(movies)
         setNewSavedMovies(movies)
       }).catch(err => console.log(err))
-  }, [newSavedMovies])
+  }, [])
 
   useEffect(() => {
     window.addEventListener("resize", handleResize)
@@ -54,6 +54,11 @@ function App() {
         })
     } else return
   }, [isLoggedIn])
+
+  console.log({
+    movies: searchMovies,
+    saveMovies: savedMovies
+  })
 
   const handleResize = (e) => {
     setWindowSize(window.innerWidth)
@@ -90,7 +95,7 @@ function App() {
     test(movie, movie.image.url, movie.image.url)
     api.addMovies(movie)
       .then((film) => {
-        // setSavedMovies([...savedMovies, film])
+        setSavedMovies([...savedMovies, film])
         setNewSavedMovies([...newSavedMovies, film])
       })
       .catch((err) => console.log(err))

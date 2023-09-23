@@ -1,58 +1,96 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { NavLink } from "react-router-dom"
 function Register({ onRegister }) {
     const validator = require('validator');
-
+    const [errorMessage, setErrorMessage] = useState({
+        name: '',
+        email: '',
+        password: ''
+    })
     const [name, setName] = useState('');
-    const [dirtyName, setDirtyName] = useState(false);
-    const [stateBtn, setStateBtn] = useState(false);
+    const [stateBtn, setStateBtn] = useState(true);
     const [email, setEmail] = useState('');
-    const [dirtyEmail, setDirtyEmail] = useState(false);
     const [password, setPassword] = useState('');
-    const [dirtyPassword, setDirtyPassword] = useState(false);
 
-    const checkDirtyEmail = (e) => {
-        if (e.target.value === '') {
-            setDirtyEmail(true)
+    useEffect(() => {
+        errorMessage.email !== '' || errorMessage.name !== '' || errorMessage.password !== '' ? setStateBtn(true) : console.log('da')
+    }, [errorMessage])
+
+    const inputValidation = (e) => {
+        const { name, value } = e.target;
+        if (value === '') {
+            setErrorMessage({
+                ...errorMessage,
+                [name]: 'Поле не должно быть пустым'
+            })
             setStateBtn(true)
-        } else {
+        }
+        else {
+            setErrorMessage({
+                ...errorMessage,
+                [name]: ''
+            })
             setStateBtn(false)
-            setDirtyEmail(false)
         }
     }
 
-    const checkDirtyName = (e) => {
-        if (e.target.value === '') {
-            setDirtyName(true)
+    const emailValidation = (email) => {
+        console.log('функция выполняется')
+        console.log(!validator.isEmail(email))
+        if (email === '') {
+            setErrorMessage({
+                ...errorMessage,
+                email: 'Поле не должно быть пустым'
+            })
+            setStateBtn(true)
+        }
+        else if (!validator.isEmail(email)) {
+            setErrorMessage({
+                ...errorMessage,
+                email: 'Email не валиден'
+            })
             setStateBtn(true)
         } else {
+            setErrorMessage({
+                ...errorMessage,
+                email: ''
+            })
             setStateBtn(false)
-            setDirtyName(false)
         }
     }
 
-    const checkDirtyPassword = (e) => {
-        if (e.target.value === '') {
-            setDirtyPassword(true)
-            setStateBtn(true)
-        } else {
-            setStateBtn(false)
-            setDirtyPassword(false)
+    const blurHandler = (e) => {
+        // eslint-disable-next-line default-case
+        switch (e.target.name) {
+            case "name":
+                inputValidation(e)
+                break
+
+            case "email":
+                // inputValidation(e)
+                emailValidation(e.target.value)
+                break
+
+            case "password":
+                inputValidation(e)
+                break
         }
     }
+
 
     const emailChangeHandler = (e) => {
-        checkDirtyEmail(e)
+        emailValidation(e.target.value)
+        // inputValidation(e)
         setEmail(e.target.value);
     }
 
     const nameChangeHandler = (e) => {
-        checkDirtyName(e)
+        inputValidation(e)
         setName(e.target.value);
     }
 
     const passwordChangehandler = (e) => {
-        checkDirtyPassword(e)
+        inputValidation(e)
         setPassword(e.target.value);
     }
 
@@ -72,18 +110,18 @@ function Register({ onRegister }) {
                     <form noValidate={true} onSubmit={submitHandler} className="authorization__form">
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">Имя</label>
-                            <input value={name} name="name" onChange={nameChangeHandler} required type="text" className="authorization__input" />
-                            <span className="authorization__error authorization__validation-error">{dirtyName ? 'Поле не может быть пустым' : ''}</span>
+                            <input onBlur={blurHandler} value={name} name="name" onChange={nameChangeHandler} required type="text" className="authorization__input" />
+                            <span className="authorization__error authorization__validation-error">{errorMessage.name}</span>
                         </div>
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">E-mail</label>
-                            <input value={email} name="email" onChange={emailChangeHandler} required className="authorization__input" />
-                            <span className="authorization__error authorization__validation-error">{dirtyEmail ? 'Поле не может быть пустым' : ''}</span>
+                            <input onBlur={blurHandler} value={email} name="email" onChange={emailChangeHandler} required className="authorization__input" />
+                            <span className="authorization__error authorization__validation-error">{errorMessage.email}</span>
                         </div>
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">Пароль</label>
-                            <input value={password} name="password" onChange={passwordChangehandler} required type="password" className="authorization__input" />
-                            <span className="authorization__error authorization__validation-error">{dirtyPassword ? 'Поле не может быть пустым' : ''}</span>
+                            <input onBlur={blurHandler} value={password} name="password" onChange={passwordChangehandler} required type="password" className="authorization__input" />
+                            <span className="authorization__error authorization__validation-error">{errorMessage.password}</span>
                         </div>
                         <button disabled={stateBtn} type="submit" className="authorization__button">Зарегистрироваться</button>
                         <div className="authorization__question-container">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import search from '../images/search.svg'
+import * as api from '../utils/MainApi'
 import FilterCheckBox from './FilterCheckBox';
 function SearchForm({ searchMovies, addFilms, foundFilm }) {
     const [errorText, setErrorText] = useState('');
@@ -12,19 +13,35 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
     //     console.log(status)
     // }, [])
 
+    // useEffect(() => {
+    //     const searchWord = localStorage.getItem('searchWord');
+    //     if (searchWord) {
+    //         setInputValue(searchWord)
+    //                 console.log(movies)
+    //                 let searchedMovies = movies.filter(({ nameRU, nameEN, }) => {
+    //                     return nameRU.toLowerCase().includes(searchWord.toLowerCase()) || nameEN.toLowerCase().includes(searchWord.toLowerCase())
+    //                 })
+    //                 addFilms(searchedMovies)
+
+    //                 console.log(getFilteredMovies(searchWord))
+    //     }
+    // }, [])
+
     useEffect(() => {
-        addFilms(filteredMovies)
+        addFilms(getFilteredMovies(inputValue))
     }, [checkActive])
 
-    const filteredMovies = searchMovies.filter(({ nameRU, nameEN, duration }) => {
-        if (checkActive && duration > 40) {
-            return false
-        } else if (checkActive && duration <= 40) {
-            return duration <= 40 && (nameRU.toLowerCase().includes(inputValue.toLowerCase()) || nameEN.toLowerCase().includes(inputValue.toLowerCase()))
-        }
+    const getFilteredMovies = (word) => {
+        return searchMovies.filter(({ nameRU, nameEN, duration }) => {
+            if (checkActive && duration > 40) {
+                return false
+            } else if (checkActive && duration <= 40) {
+                return duration <= 40 && (nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase()))
+            }
 
-        return nameRU.toLowerCase().includes(inputValue.toLowerCase()) || nameEN.toLowerCase().includes(inputValue.toLowerCase())
-    })
+            return nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase())
+        })
+    }
 
     const getInputValue = (e) => {
         setInputValue(e.target.value)
@@ -32,11 +49,12 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
 
     const searchMovie = (e) => {
         e.preventDefault();
+        localStorage.setItem('searchWord', inputValue)
         setInputValue('')
         if (inputValue === '') {
             setErrorText('Нужно ввести ключевое слово')
         } else {
-            addFilms(filteredMovies)
+            addFilms(getFilteredMovies(inputValue))
         }
     }
 

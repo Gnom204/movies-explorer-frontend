@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import search from '../images/search.svg'
+import * as api from '../utils/MainApi'
 import FilterCheckBox from './FilterCheckBox';
-function SearchForm({ searchMovies, addFilms, foundFilm }) {
+function SearchForm({ searchMovies, addFilms, isSave, foundFilm }) {
     const [errorText, setErrorText] = useState('');
     const [inputValue, setInputValue] = useState('');
-    const [checkActive, setCheckActive] = useState(false);
+    const [checkActive, setCheckActive] = useState(JSON.parse(localStorage.getItem('activeStatus')) || false);
 
     // useEffect(() => {
     //     const status = localStorage.getItem('activeStatus')
@@ -13,18 +14,38 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
     // }, [])
 
     useEffect(() => {
-        addFilms(filteredMovies)
+        const searchWord = localStorage.getItem('searchWord');
+        const movies = JSON.parse(localStorage.getItem('moviesData'));
+
+        if (searchWord) {
+            if (!isSave) {
+                setInputValue(searchWord)
+                // let searchedMovies = movies.filter(({ nameRU, nameEN, }) => {
+                //     return nameRU.toLowerCase().includes(searchWord.toLowerCase()) || nameEN.toLowerCase().includes(searchWord.toLowerCase())
+                // })
+                setTimeout(() => {
+                    addFilms(movies)
+                }, 100)
+                console.log(movies)
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        addFilms(getFilteredMovies(inputValue))
     }, [checkActive])
 
-    const filteredMovies = searchMovies.filter(({ nameRU, nameEN, duration }) => {
-        if (checkActive && duration > 40) {
-            return false
-        } else if (checkActive && duration <= 40) {
-            return duration <= 40 && (nameRU.toLowerCase().includes(inputValue.toLowerCase()) || nameEN.toLowerCase().includes(inputValue.toLowerCase()))
-        }
+    const getFilteredMovies = (word) => {
+        return searchMovies.filter(({ nameRU, nameEN, duration }) => {
+            if (checkActive && duration > 40) {
+                return false
+            } else if (checkActive && duration <= 40) {
+                return duration <= 40 && (nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase()))
+            }
 
-        return nameRU.toLowerCase().includes(inputValue.toLowerCase()) || nameEN.toLowerCase().includes(inputValue.toLowerCase())
-    })
+            return nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase())
+        })
+    }
 
     const getInputValue = (e) => {
         setInputValue(e.target.value)
@@ -32,11 +53,14 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
 
     const searchMovie = (e) => {
         e.preventDefault();
+        localStorage.setItem('searchWord', inputValue)
         setInputValue('')
         if (inputValue === '') {
             setErrorText('Нужно ввести ключевое слово')
         } else {
-            addFilms(filteredMovies)
+            localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue)))
+            addFilms(getFilteredMovies(inputValue))
+            setErrorText('')
         }
     }
 

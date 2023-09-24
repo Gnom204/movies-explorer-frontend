@@ -10,6 +10,11 @@
     cursor: pointer;
 }
 
+.authorization__button:disabled {
+    background-color: #3f3f41;
+    cursor: default;
+}
+
 @media screen and (max-width:464px) {
     .authorization__button {
         padding: 14px 68px;

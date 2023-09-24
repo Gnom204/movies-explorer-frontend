@@ -1,49 +1,85 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom"
 function Login({ onLogin, errorText }) {
     const validator = require('validator');
-    const [btnState, setBtnState] = useState(false)
+    const [errorMessage, setErrorMessage] = useState({
+        email: '',
+        password: ''
+    })
+    const [stateBtn, setStateBtn] = useState(true)
     const [email, setEmail] = useState('');
-    const [errorMessagePassword, setErrorMassegePassword] = useState('')
-    const [errorMessageEmail, setErrorMassegeEmail] = useState('')
-    const [dirtyEmail, setDirtyEmail] = useState(false);
     const [password, setPassword] = useState('');
-    const [dirtyPassword, setDirtyPassword] = useState(false);
 
-    const checkDirtyEmail = (e) => {
-        if (validator.isEmail(e.target.value)) {
-            setBtnState(false)
-        }
-        else if (e.target.value === '') {
-            setErrorMassegeEmail('Поле не может быть пустым')
-            setDirtyEmail(true)
-            setBtnState(true)
-        } else {
-            setDirtyEmail(false)
-            setBtnState(true)
-            setErrorMassegeEmail('')
-        }
-    }
+    useEffect(() => {
+        errorMessage.email !== '' || errorMessage.password !== '' ? setStateBtn(true) : console.log('net')
+    }, [errorMessage])
 
-    const checkDirtyPassword = (e) => {
-        if (e.target.value === '') {
-            setErrorMassegePassword('Поле не может быть пустым')
-            setDirtyPassword(true)
-            setBtnState(true)
-        } else {
-            setDirtyPassword(false)
-            setErrorMassegePassword('')
-            setBtnState(false)
+    const inputValidation = (e) => {
+        const { name, value } = e.target;
+        if (value === '') {
+            setErrorMessage({
+                ...errorMessage,
+                [name]: 'Поле не должно быть пустым'
+            })
+            setStateBtn(true)
+        }
+        else {
+            setErrorMessage({
+                ...errorMessage,
+                [name]: ''
+            })
+            setStateBtn(false)
         }
     }
 
-    const emailHandler = (e) => {
-        checkDirtyEmail(e)
+    const emailValidation = (email) => {
+        console.log('функция выполняется')
+        console.log(!validator.isEmail(email))
+        if (email === '') {
+            setErrorMessage({
+                ...errorMessage,
+                email: 'Поле не должно быть пустым'
+            })
+            setStateBtn(true)
+        }
+        else if (!validator.isEmail(email)) {
+            setErrorMessage({
+                ...errorMessage,
+                email: 'Email не валиден'
+            })
+            setStateBtn(true)
+        } else {
+            setErrorMessage({
+                ...errorMessage,
+                email: ''
+            })
+            setStateBtn(false)
+        }
+    }
+
+    const blurHandler = (e) => {
+        // eslint-disable-next-line default-case
+        switch (e.target.name) {
+            case "email":
+                // inputValidation(e)
+                emailValidation(e.target.value)
+                break
+
+            case "password":
+                inputValidation(e)
+                break
+        }
+    }
+
+
+    const emailChangeHandler = (e) => {
+        emailValidation(e.target.value)
+        // inputValidation(e)
         setEmail(e.target.value);
     }
 
-    const passwordHandler = (e) => {
-        checkDirtyPassword(e)
+    const passwordChangehandler = (e) => {
+        inputValidation(e)
         setPassword(e.target.value);
     }
 
@@ -52,11 +88,10 @@ function Login({ onLogin, errorText }) {
         e.preventDefault();
         if (validator.isEmail(email)) {
             onLogin(email, password);
-            setErrorMassegeEmail(errorText)
-            setErrorMassegePassword(errorText)
-        } else if (!validator.isEmail(email)) {
-            setErrorMassegeEmail('email не валиден')
-            setBtnState(true)
+            setErrorMessage({
+                ...errorMessage,
+                password: errorText
+            })
         }
     }
     return (
@@ -64,18 +99,18 @@ function Login({ onLogin, errorText }) {
             <div className="authorization">
                 <NavLink to='/' className="logo" />
                 <h2 className="authorization__welcome">Рады видеть!</h2>
-                <form onSubmit={handleSubmit} className="authorization__form">
+                <form noValidate={true} onSubmit={handleSubmit} className="authorization__form">
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">E-mail</label>
-                        <input onChange={emailHandler} required className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{errorMessageEmail}</span>
+                        <input name="email" onBlur={blurHandler} value={email} onChange={emailChangeHandler} required className="authorization__input" />
+                        <span className="authorization__error authorization__validation-error">{errorMessage.email}</span>
                     </div>
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">Пароль</label>
-                        <input onChange={passwordHandler} required type="password" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{errorMessagePassword}</span>
+                        <input name="password" onBlur={blurHandler} value={password} onChange={passwordChangehandler} required type="password" className="authorization__input" />
+                        <span className="authorization__error authorization__validation-error">{errorMessage.password}</span>
                     </div>
-                    <button disabled={btnState} type="submit" className="authorization__button">Войти</button>
+                    <button disabled={stateBtn} type="submit" className="authorization__button">Войти</button>
                     <div className="authorization__question-container">
                         <span className="authorization__question">Ещё не зарегистрированы?</span>
                         <NavLink to='/signup' className="authorization__link">Зарегистрироваться</NavLink>

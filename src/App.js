@@ -40,7 +40,7 @@ function App() {
         setSavedMovies(movies)
         setNewSavedMovies(movies)
       }).catch(err => console.log(err))
-  }, [newSavedMovies])
+  }, [])
 
   useEffect(() => {
     window.addEventListener("resize", handleResize)
@@ -67,13 +67,17 @@ function App() {
     setNewSavedMovies(newSavedMovie)
   }
 
-  const addFilms = (movie) => {
-    setIsLoading(true);
-    localStorage.setItem('movies', JSON.stringify(movie))
-    setTimeout(() => {
-      setIsLoading(false)
-      setFoundFilm(movie)
-    }, 1000)
+  const addFilms = (movie, isSave) => {
+    if (isSave) {
+      return
+    } else {
+      setIsLoading(true);
+      localStorage.setItem('movies', JSON.stringify(movie))
+      setTimeout(() => {
+        setIsLoading(false)
+        setFoundFilm(movie)
+      }, 1000)
+    }
   }
 
   const test = ({ country, director, duration, year, description, nameRU, nameEN, id, trailerLink }, thumbnail, image) => {
@@ -90,7 +94,7 @@ function App() {
     test(movie, movie.image.url, movie.image.url)
     api.addMovies(movie)
       .then((film) => {
-        // setSavedMovies([...savedMovies, film])
+        setSavedMovies([...savedMovies, film])
         setNewSavedMovies([...newSavedMovies, film])
       })
       .catch((err) => console.log(err))
@@ -123,7 +127,6 @@ function App() {
         setCurrentUser(res.data)
         localStorage.setItem('loginStatus', true)
         localStorage.setItem('userData', JSON.stringify(res.data))
-        console.log({ res: res, currentUser: currentUser })
         navigation('/movies', { replace: true })
       })
       .catch(err => {
@@ -143,7 +146,7 @@ function App() {
           <Route path='/movies' element={
             <>
               <Header isLoggedIn={isLoggedIn} />
-              <ProtectedRoute element={Movie} saveMovies={savedMovies} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={addFilms} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
+              <ProtectedRoute element={Movie} saveMovies={savedMovies} movieDelete={movieDelete} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={addFilms} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
               <Footer />
             </>
           } />

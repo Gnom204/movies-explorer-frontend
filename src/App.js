@@ -55,11 +55,6 @@ function App() {
     } else return
   }, [isLoggedIn])
 
-  console.log({
-    movies: searchMovies,
-    saveMovies: savedMovies
-  })
-
   const handleResize = (e) => {
     setWindowSize(window.innerWidth)
   }
@@ -72,13 +67,17 @@ function App() {
     setNewSavedMovies(newSavedMovie)
   }
 
-  const addFilms = (movie) => {
-    setIsLoading(true);
-    localStorage.setItem('movies', JSON.stringify(movie))
-    setTimeout(() => {
-      setIsLoading(false)
-      setFoundFilm(movie)
-    }, 1000)
+  const addFilms = (movie, isSave) => {
+    if (isSave) {
+      return
+    } else {
+      setIsLoading(true);
+      localStorage.setItem('movies', JSON.stringify(movie))
+      setTimeout(() => {
+        setIsLoading(false)
+        setFoundFilm(movie)
+      }, 1000)
+    }
   }
 
   const test = ({ country, director, duration, year, description, nameRU, nameEN, id, trailerLink }, thumbnail, image) => {
@@ -128,7 +127,6 @@ function App() {
         setCurrentUser(res.data)
         localStorage.setItem('loginStatus', true)
         localStorage.setItem('userData', JSON.stringify(res.data))
-        console.log({ res: res, currentUser: currentUser })
         navigation('/movies', { replace: true })
       })
       .catch(err => {
@@ -148,7 +146,7 @@ function App() {
           <Route path='/movies' element={
             <>
               <Header isLoggedIn={isLoggedIn} />
-              <ProtectedRoute element={Movie} saveMovies={savedMovies} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={addFilms} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
+              <ProtectedRoute element={Movie} saveMovies={savedMovies} movieDelete={movieDelete} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={addFilms} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
               <Footer />
             </>
           } />

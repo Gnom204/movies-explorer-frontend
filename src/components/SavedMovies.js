@@ -5,7 +5,7 @@ function SavedMovies({ windowSize, movieDelete, movies, searchMovies, newMovies,
 
     return (
         <>
-            <SearchForm foundFilm={movies} addFilms={addFilms} searchMovies={newMovies} />
+            <SearchForm foundFilm={movies} isSave={true} addFilms={addFilms} searchMovies={newMovies} />
             <MoviesCardList windowSize={windowSize} movieDelete={movieDelete} isSave={true} movies={movies} searchMovies={searchMovies}>
 
             </MoviesCardList>

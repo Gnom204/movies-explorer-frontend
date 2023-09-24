@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import search from '../images/search.svg'
 import * as api from '../utils/MainApi'
 import FilterCheckBox from './FilterCheckBox';
-function SearchForm({ searchMovies, addFilms, foundFilm }) {
+function SearchForm({ searchMovies, addFilms, isSave, foundFilm }) {
     const [errorText, setErrorText] = useState('');
     const [inputValue, setInputValue] = useState('');
-    const [checkActive, setCheckActive] = useState(false);
+    const [checkActive, setCheckActive] = useState(JSON.parse(localStorage.getItem('activeStatus')) || false);
 
     // useEffect(() => {
     //     const status = localStorage.getItem('activeStatus')
@@ -13,19 +13,23 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
     //     console.log(status)
     // }, [])
 
-    // useEffect(() => {
-    //     const searchWord = localStorage.getItem('searchWord');
-    //     if (searchWord) {
-    //         setInputValue(searchWord)
-    //                 console.log(movies)
-    //                 let searchedMovies = movies.filter(({ nameRU, nameEN, }) => {
-    //                     return nameRU.toLowerCase().includes(searchWord.toLowerCase()) || nameEN.toLowerCase().includes(searchWord.toLowerCase())
-    //                 })
-    //                 addFilms(searchedMovies)
+    useEffect(() => {
+        const searchWord = localStorage.getItem('searchWord');
+        const movies = JSON.parse(localStorage.getItem('moviesData'));
 
-    //                 console.log(getFilteredMovies(searchWord))
-    //     }
-    // }, [])
+        if (searchWord) {
+            if (!isSave) {
+                setInputValue(searchWord)
+                // let searchedMovies = movies.filter(({ nameRU, nameEN, }) => {
+                //     return nameRU.toLowerCase().includes(searchWord.toLowerCase()) || nameEN.toLowerCase().includes(searchWord.toLowerCase())
+                // })
+                setTimeout(() => {
+                    addFilms(movies)
+                }, 100)
+                console.log(movies)
+            }
+        }
+    }, [])
 
     useEffect(() => {
         addFilms(getFilteredMovies(inputValue))
@@ -54,7 +58,9 @@ function SearchForm({ searchMovies, addFilms, foundFilm }) {
         if (inputValue === '') {
             setErrorText('Нужно ввести ключевое слово')
         } else {
+            localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue)))
             addFilms(getFilteredMovies(inputValue))
+            setErrorText('')
         }
     }
 

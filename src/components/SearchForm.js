@@ -7,6 +7,10 @@ function SearchForm({ searchMovies, addFilms, isSave, foundFilm }) {
     const [inputValue, setInputValue] = useState('');
     const [checkActive, setCheckActive] = useState(JSON.parse(localStorage.getItem('activeStatus')) || false);
 
+    useEffect(() => {
+        localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue)))
+    }, [checkActive])
+
     // useEffect(() => {
     //     const status = localStorage.getItem('activeStatus')
     //     setCheckActive(status)

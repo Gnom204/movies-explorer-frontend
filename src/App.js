@@ -105,10 +105,10 @@ function App() {
     console.log(name, email, password)
     api.register(name, email, password)
       .then((res) => {
-        console.log(res)
+        setErrorText('')
         onLogin(email, password)
       })
-      .catch(err => console.log(err))
+      .catch(err => setErrorText('Пользователь уже существует'))
   }
 
   const logout = () => {
@@ -159,8 +159,8 @@ function App() {
             <Header isLoggedIn={isLoggedIn} />
             <ProtectedRoute element={Profile} logout={logout} isLoggedIn={isLoggedIn} />
           </>} />
-          <Route path='/signup' element={isLoggedIn ? <Navigate to="/" /> : <Register onRegister={onRegister} />} />
-          <Route path='/signin' element={isLoggedIn ? <Navigate to="/" /> : <Login errorText={errorText} onLogin={onLogin} />} />
+          <Route path='/signup' element={isLoggedIn ? <Navigate to="/" /> : <Register errorText={errorText} setError={setErrorText} onRegister={onRegister} />} />
+          <Route path='/signin' element={isLoggedIn ? <Navigate to="/" /> : <Login errorText={errorText} setError={setErrorText} onLogin={onLogin} />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>

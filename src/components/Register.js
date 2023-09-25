@@ -1,105 +1,144 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { NavLink } from "react-router-dom"
-function Register({ onRegister }) {
+function Register({ onRegister, errorText, setError }) {
     const validator = require('validator');
-    const [errorMessage, setErrorMessage] = useState({
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('')
+    const [errors, setErrors] = useState({
         name: '',
         email: '',
         password: ''
-    })
-    const [name, setName] = useState('');
-    const [stateBtn, setStateBtn] = useState(true);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    });
+    const [submitDisabled, setSubmitDisabled] = useState(true);
 
-    useEffect(() => {
-        errorMessage.email !== '' || errorMessage.name !== '' || errorMessage.password !== '' ? setStateBtn(true) : console.log('da')
-    }, [errorMessage])
+    // const validateEmail = (email) => {
+    //     let newErrors = {};
+    //     let isValid = true;
 
-    const inputValidation = (e) => {
-        const { name, value } = e.target;
-        if (value === '') {
-            setErrorMessage({
-                ...errorMessage,
-                [name]: 'Поле не должно быть пустым'
-            })
-            setStateBtn(true)
+    //     if (email === '') {
+    //         newErrors.email = 'Поле Email должно быть заполнено';
+    //         isValid = false;
+    //     } else if (!validator.isEmail(email)) {
+    //         newErrors.email = 'Email введен не правильно, попробуйте использовать символ @';
+    //         isValid = false;
+    //     }
+
+    //     setErrors(newErrors);
+    //     setSubmitDisabled(!isValid);
+    // }
+
+    // const validatePassword = (password) => {
+    //     let newErrors = {};
+    //     let isValid = true;
+
+    //     if (password.length < 4) {
+    //         newErrors.password = 'Password должен быть длиннее 4 символов';
+    //         isValid = false;
+    //     }
+
+    //     setErrors(newErrors);
+    //     setSubmitDisabled(!isValid);
+    // }
+
+    // const validateName = (name) => {
+    //     let newErrors = {};
+    //     let isValid = true;
+
+    //     if (name.length < 4) {
+    //         newErrors.name = 'name должен быть длиннее 4 символов';
+    //         isValid = false;
+    //     }
+
+    //     setErrors(newErrors);
+    //     setSubmitDisabled(!isValid);
+    // }
+
+
+    const validateForm = (e) => {
+        let isValid = true;
+        const { name, value } = e.target
+        if (name === 'name') {
+            if (value.length < 4) {
+                setErrors({
+                    ...errors,
+                    [name]: 'name должен быть длиннее 4 символов'
+                })
+                isValid = false;
+            } else {
+                setErrors({
+                    ...errors,
+                    [name]: ''
+                })
+            }
         }
-        else {
-            setErrorMessage({
-                ...errorMessage,
-                [name]: ''
-            })
-            setStateBtn(false)
+        if (name === 'email') {
+            if (value === '') {
+                setErrors({
+                    ...errors,
+                    [name]: 'email должен быть длиннее 4 символов'
+                })
+                isValid = false
+            } else if (!validator.isEmail(value)) {
+                setErrors({
+                    ...errors,
+                    [name]: 'email записан неправильно, попробуйте использовать символ @'
+                })
+                isValid = false
+            } else {
+                setErrors({
+                    ...errors,
+                    [name]: ''
+                })
+            }
         }
-    }
-
-    const emailValidation = (email) => {
-        console.log('функция выполняется')
-        console.log(!validator.isEmail(email))
-        if (email === '') {
-            setErrorMessage({
-                ...errorMessage,
-                email: 'Поле не должно быть пустым'
-            })
-            setStateBtn(true)
+        if (name === 'password') {
+            if (value.length < 4) {
+                setErrors({
+                    ...errors,
+                    [name]: 'email должен быть длиннее 4 символов'
+                })
+                isValid = false;
+            } else {
+                setErrors({
+                    ...errors,
+                    [name]: ''
+                })
+            }
         }
-        else if (!validator.isEmail(email)) {
-            setErrorMessage({
-                ...errorMessage,
-                email: 'Email не валиден'
-            })
-            setStateBtn(true)
-        } else {
-            setErrorMessage({
-                ...errorMessage,
-                email: ''
-            })
-            setStateBtn(false)
+        setError('')
+        setSubmitDisabled(!isValid);
+    };
+
+    const blurValidation = () => {
+        let errors = {}
+        let isValid = true
+        if (!name) {
+            setError('')
+            errors.name = 'Поле не должно быть пустым'
+            isValid = false
+        } if (!email) {
+            setError('')
+            errors.email = 'Поле не должно быть пустым'
+            isValid = false
+        } if (!password) {
+            setError('')
+            errors.password = 'Поле не должно быть пустым'
+            isValid = false
         }
-    }
-
-    const blurHandler = (e) => {
-        // eslint-disable-next-line default-case
-        switch (e.target.name) {
-            case "name":
-                inputValidation(e)
-                break
-
-            case "email":
-                // inputValidation(e)
-                emailValidation(e.target.value)
-                break
-
-            case "password":
-                inputValidation(e)
-                break
-        }
-    }
-
-
-    const emailChangeHandler = (e) => {
-        emailValidation(e.target.value)
-        // inputValidation(e)
-        setEmail(e.target.value);
-    }
-
-    const nameChangeHandler = (e) => {
-        inputValidation(e)
-        setName(e.target.value);
-    }
-
-    const passwordChangehandler = (e) => {
-        inputValidation(e)
-        setPassword(e.target.value);
+        setError('')
+        setErrors(errors)
+        setSubmitDisabled(!isValid)
     }
 
     const submitHandler = (e) => {
-        e.preventDefault()
-        if (validator.isEmail(email)) {
+        e.preventDefault();
+        blurValidation()
+        if (Object.keys(errors).length === 0) {
             onRegister(name, email, password)
         }
-    }
+    };
+
 
     return (
         <>
@@ -110,20 +149,33 @@ function Register({ onRegister }) {
                     <form noValidate={true} onSubmit={submitHandler} className="authorization__form">
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">Имя</label>
-                            <input onBlur={blurHandler} value={name} name="name" onChange={nameChangeHandler} required type="text" className="authorization__input" />
-                            <span className="authorization__error authorization__validation-error">{errorMessage.name}</span>
+                            <input onBlur={blurValidation} type="text" value={name} onChange={(e) => {
+                                setName(e.target.value);
+                                validateForm(e);
+                            }} required name="name" className="authorization__input" />
+                            <span className="authorization__error authorization__validation-error">{errors.name}{errorText}</span>
                         </div>
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">E-mail</label>
-                            <input onBlur={blurHandler} value={email} name="email" onChange={emailChangeHandler} required className="authorization__input" />
-                            <span className="authorization__error authorization__validation-error">{errorMessage.email}</span>
+                            <input type="text"
+                                value={email}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    validateForm(e);
+                                }} onBlur={blurValidation} required name="email" className="authorization__input" />
+                            <span className="authorization__error authorization__validation-error">{errors.email}{errorText}</span>
                         </div>
                         <div className="authorization__input-container">
                             <label className="authorization__annotation">Пароль</label>
-                            <input onBlur={blurHandler} value={password} name="password" onChange={passwordChangehandler} required type="password" className="authorization__input" />
-                            <span className="authorization__error authorization__validation-error">{errorMessage.password}</span>
+                            <input type="password"
+                                value={password}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    validateForm(e);
+                                }} onBlur={blurValidation} name="password" className="authorization__input" />
+                            <span className="authorization__error authorization__validation-error">{errors.password}{errorText}</span>
                         </div>
-                        <button disabled={stateBtn} type="submit" className="authorization__button">Зарегистрироваться</button>
+                        <button disabled={submitDisabled} type="submit" className="authorization__button">Зарегистрироваться</button>
                         <div className="authorization__question-container">
                             <span className="authorization__question">Уже зарегистрировались?</span>
                             <NavLink to='/signin' className="authorization__link">Войти</NavLink>

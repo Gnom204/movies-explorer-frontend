@@ -1,97 +1,80 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom"
-function Login({ onLogin, errorText }) {
+function Login({ onLogin, errorText, setError }) {
     const validator = require('validator');
-    const [errorMessage, setErrorMessage] = useState({
-        email: '',
-        password: ''
-    })
-    const [stateBtn, setStateBtn] = useState(true)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState({
+        email: '',
+        password: ''
+    });
+    const [submitDisabled, setSubmitDisabled] = useState(true);
 
-    useEffect(() => {
-        errorMessage.email !== '' || errorMessage.password !== '' ? setStateBtn(true) : console.log('net')
-    }, [errorMessage])
+    const validateForm = (e) => {
+        let isValid = true;
+        const { name, value } = e.target
+        if (name === 'email') {
+            if (value === '') {
+                setErrors({
+                    ...errors,
+                    [name]: 'email должен быть длиннее 4 символов'
+                })
+                isValid = false
+            } else if (!validator.isEmail(value)) {
+                setErrors({
+                    ...errors,
+                    [name]: 'email записан неправильно, попробуйте использовать символ @'
+                })
+                isValid = false
+            } else {
+                setErrors({
+                    ...errors,
+                    [name]: ''
+                })
+            }
+        }
+        if (name === 'password') {
+            if (value.length < 4) {
+                setErrors({
+                    ...errors,
+                    [name]: 'Пароль должен быть длиннее 4 символов'
+                })
+                isValid = false;
+            } else {
+                setErrors({
+                    ...errors,
+                    [name]: ''
+                })
+            }
+        }
+        setError('')
+        setSubmitDisabled(!isValid);
+    };
 
-    const inputValidation = (e) => {
-        const { name, value } = e.target;
-        if (value === '') {
-            setErrorMessage({
-                ...errorMessage,
-                [name]: 'Поле не должно быть пустым'
-            })
-            setStateBtn(true)
+    const blurValidation = () => {
+        let errors = {}
+        let isValid = true
+        if (!email) {
+            setError('')
+            errors.email = 'Поле не должно быть пустым'
+            isValid = false
+        } if (!password) {
+            setError('')
+            errors.password = 'Поле не должно быть пустым'
+            isValid = false
         }
-        else {
-            setErrorMessage({
-                ...errorMessage,
-                [name]: ''
-            })
-            setStateBtn(false)
-        }
+        setError('')
+        setErrors(errors)
+        setSubmitDisabled(!isValid)
     }
 
-    const emailValidation = (email) => {
-        console.log('функция выполняется')
-        console.log(!validator.isEmail(email))
-        if (email === '') {
-            setErrorMessage({
-                ...errorMessage,
-                email: 'Поле не должно быть пустым'
-            })
-            setStateBtn(true)
-        }
-        else if (!validator.isEmail(email)) {
-            setErrorMessage({
-                ...errorMessage,
-                email: 'Email не валиден'
-            })
-            setStateBtn(true)
-        } else {
-            setErrorMessage({
-                ...errorMessage,
-                email: ''
-            })
-            setStateBtn(false)
-        }
-    }
-
-    const blurHandler = (e) => {
-        // eslint-disable-next-line default-case
-        switch (e.target.name) {
-            case "email":
-                // inputValidation(e)
-                emailValidation(e.target.value)
-                break
-
-            case "password":
-                inputValidation(e)
-                break
-        }
-    }
-
-
-    const emailChangeHandler = (e) => {
-        emailValidation(e.target.value)
-        // inputValidation(e)
-        setEmail(e.target.value);
-    }
-
-    const passwordChangehandler = (e) => {
-        inputValidation(e)
-        setPassword(e.target.value);
-    }
 
     const handleSubmit = (e) => {
-        console.log(errorText)
+        let errors = {}
         e.preventDefault();
-        if (validator.isEmail(email)) {
-            onLogin(email, password);
-            setErrorMessage({
-                ...errorMessage,
-                password: errorText
-            })
+        blurValidation()
+        if (Object.keys(errors).length === 0) {
+            onLogin(email, password)
         }
     }
     return (
@@ -102,15 +85,24 @@ function Login({ onLogin, errorText }) {
                 <form noValidate={true} onSubmit={handleSubmit} className="authorization__form">
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">E-mail</label>
-                        <input name="email" onBlur={blurHandler} value={email} onChange={emailChangeHandler} required className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{errorMessage.email}</span>
+                        <input value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                validateForm(e);
+                            }} onBlur={blurValidation} required name="email" className="authorization__input" />
+                        <span className="authorization__error authorization__validation-error">{errors.email}{errorText}</span>
                     </div>
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">Пароль</label>
-                        <input name="password" onBlur={blurHandler} value={password} onChange={passwordChangehandler} required type="password" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{errorMessage.password}</span>
+                        <input type="password"
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                validateForm(e);
+                            }} onBlur={blurValidation} name="password" className="authorization__input" />
+                        <span className="authorization__error authorization__validation-error">{errors.password}{errorText}</span>
                     </div>
-                    <button disabled={stateBtn} type="submit" className="authorization__button">Войти</button>
+                    <button disabled={submitDisabled} type="submit" className="authorization__button">Войти</button>
                     <div className="authorization__question-container">
                         <span className="authorization__question">Ещё не зарегистрированы?</span>
                         <NavLink to='/signup' className="authorization__link">Зарегистрироваться</NavLink>

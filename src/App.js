@@ -26,6 +26,7 @@ function App() {
   const [windowSize, setWindowSize] = useState(window.innerWidth)
   const [savedMovies, setSavedMovies] = useState(JSON.parse(localStorage.getItem('savedMovie')) || [])
   const [isLoading, setIsLoading] = useState(false);
+  const [errorTextProfile, setErrorTextProfile] = useState('')
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'))
@@ -119,6 +120,23 @@ function App() {
       })
   }
 
+  const updateUser = (name, email) => {
+    if (name === currentUser.name || email === currentUser.email) {
+      setErrorTextProfile('Введенные данные не изменились')
+      console.log(currentUser.email)
+    } else {
+      setErrorTextProfile('Данные успешнно изменены')
+      console.log(currentUser.email)
+      api.updateProfile(name, email)
+        .then((user) => {
+          console.log(user)
+          setCurrentUser(user)
+          localStorage.setItem('userData', JSON.stringify(user))
+        })
+        .catch(err => setErrorTextProfile('Пользователь с таким email уже существует'))
+    }
+  }
+
   const onLogin = (email, password) => {
     api.login(email, password)
       .then((res) => {
@@ -157,7 +175,7 @@ function App() {
           </>} />
           <Route path='/profile' element={<>
             <Header isLoggedIn={isLoggedIn} />
-            <ProtectedRoute element={Profile} logout={logout} isLoggedIn={isLoggedIn} />
+            <ProtectedRoute element={Profile} errorTextProfile={errorTextProfile} update={updateUser} logout={logout} isLoggedIn={isLoggedIn} />
           </>} />
           <Route path='/signup' element={isLoggedIn ? <Navigate to="/" /> : <Register errorText={errorText} setError={setErrorText} onRegister={onRegister} />} />
           <Route path='/signin' element={isLoggedIn ? <Navigate to="/" /> : <Login errorText={errorText} setError={setErrorText} onLogin={onLogin} />} />

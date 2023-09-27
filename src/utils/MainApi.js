@@ -16,6 +16,23 @@ export const getMovies = () => {
         })
 }
 
+export const updateProfile = (name, email) => {
+    return fetch(BASE_URL + '/users/me', {
+        credentials: 'include',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: 'PATCH',
+        body: JSON.stringify({
+            "name": name,
+            "email": email
+        })
+    })
+        .then((res) => {
+            return handleError(res)
+        })
+}
+
 export const getUserInfo = () => {
     return fetch(BASE_URL + '/users/me', {
         credentials: 'include'

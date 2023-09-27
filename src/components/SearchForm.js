@@ -58,13 +58,17 @@ function SearchForm({ searchMovies, addFilms, isSave, foundFilm }) {
     const searchMovie = (e) => {
         e.preventDefault();
         localStorage.setItem('searchWord', inputValue)
-        setInputValue('')
         if (inputValue === '') {
             setErrorText('Нужно ввести ключевое слово')
         } else {
-            localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue)))
-            addFilms(getFilteredMovies(inputValue))
-            setErrorText('')
+            if (getFilteredMovies(inputValue).length === 0) {
+                setErrorText('Ничего не найдено')
+                addFilms(getFilteredMovies(inputValue))
+            } else {
+                localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue)))
+                addFilms(getFilteredMovies(inputValue))
+                setErrorText('')
+            }
         }
     }
 

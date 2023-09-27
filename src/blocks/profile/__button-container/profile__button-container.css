@@ -1,0 +1,5 @@
+.profile__button-container {
+    margin-top: 220px;
+    display: flex;
+    flex-direction: column;
+}

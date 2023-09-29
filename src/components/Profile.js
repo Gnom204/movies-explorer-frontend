@@ -31,6 +31,7 @@ function Profile({ logout, update, errorTextProfile }) {
 
     const validateForm = (e, userName, userEmail) => {
         const { name, value } = e.target;
+        console.log(errors)
         if (name === "name") {
             if (!value) {
                 setErrors({
@@ -45,7 +46,7 @@ function Profile({ logout, update, errorTextProfile }) {
                     [name]: 'Длина имени должн абыть больше 4 символов'
                 })
                 setNameValid(false)
-            } if (userName === value) {
+            } else if (userName === value) {
                 setErrors({
                     ...errors,
                     [name]: 'Данные совпадают с предыдущими'
@@ -73,7 +74,7 @@ function Profile({ logout, update, errorTextProfile }) {
                     [name]: 'Email не валиден, попробуйте использовать символ @'
                 })
                 setEmailValid(false)
-            } if (userEmail === value) {
+            } else if (userEmail === value) {
                 setErrors({
                     ...errors,
                     [name]: 'Данные совпадают с предыдущими'
@@ -91,7 +92,6 @@ function Profile({ logout, update, errorTextProfile }) {
     }
 
     const changeHandlerName = (e, name, email) => {
-        console.log(name, email)
         validateForm(e, name, email)
         setNameValue(e.target.value);
     }
@@ -99,7 +99,6 @@ function Profile({ logout, update, errorTextProfile }) {
     const changeHandlerEmail = (e, name, email) => {
         validateForm(e, name, email)
         setEmailValue(e.target.value);
-        console.log(emailValue)
     }
 
     const handleEdit = () => {

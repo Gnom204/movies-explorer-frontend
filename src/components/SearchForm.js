@@ -1,55 +1,44 @@
 import { useEffect, useState } from 'react';
 import search from '../images/search.svg'
-import * as api from '../utils/MainApi'
 import FilterCheckBox from './FilterCheckBox';
-function SearchForm({ searchMovies, addFilms, isSave, foundFilm }) {
+function SearchForm({ searchMovies, errorMassage, getSearchedFilm, getFilteredMovies, addFilms, isSave, foundFilm }) {
     const [errorText, setErrorText] = useState('');
     const [inputValue, setInputValue] = useState('');
-    const [checkActive, setCheckActive] = useState(JSON.parse(localStorage.getItem('activeStatus')) || false);
-
-    useEffect(() => {
-        localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue)))
-    }, [checkActive])
-
+    const [checkActive, setCheckActive] = useState(localStorage.getItem('activeStatus') || false);
+    const [checkSaveActive, setCheckSaveActive] = useState(false)
+    const [localLoading, setLocalLoading] = useState(false)
     // useEffect(() => {
-    //     const status = localStorage.getItem('activeStatus')
-    //     setCheckActive(status)
-    //     console.log(status)
-    // }, [])
+    //     localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue, checkActive)))
+    // }, [checkActive])
 
     useEffect(() => {
-        const searchWord = localStorage.getItem('searchWord');
-        const movies = JSON.parse(localStorage.getItem('moviesData'));
-
-        if (searchWord) {
+        if (localStorage.getItem('moviesData') !== undefined) {
             if (!isSave) {
-                setInputValue(searchWord)
-                // let searchedMovies = movies.filter(({ nameRU, nameEN, }) => {
-                //     return nameRU.toLowerCase().includes(searchWord.toLowerCase()) || nameEN.toLowerCase().includes(searchWord.toLowerCase())
-                // })
-                setTimeout(() => {
-                    addFilms(movies)
-                }, 100)
-                console.log(movies)
+                const searchWord = localStorage.getItem('searchWord');
+                const status = localStorage.getItem('activeStatus')
+                const movies = JSON.parse(localStorage.getItem('moviesData'))
+                if (searchWord) {
+                    if (!isSave) {
+                        addFilms(movies)
+                        setInputValue(searchWord)
+                        setCheckActive(status)
+                        setLocalLoading(true)
+                    }
+                }
             }
         }
     }, [])
 
     useEffect(() => {
-        addFilms(getFilteredMovies(inputValue))
-    }, [checkActive])
-
-    const getFilteredMovies = (word) => {
-        return searchMovies.filter(({ nameRU, nameEN, duration }) => {
-            if (checkActive && duration > 40) {
-                return false
-            } else if (checkActive && duration <= 40) {
-                return duration <= 40 && (nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase()))
+        if (localLoading === true) {
+            if (!isSave) {
+                getFilteredMovies(inputValue, checkActive)
+            } else {
+                getFilteredMovies(inputValue, checkSaveActive)
             }
-
-            return nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase())
-        })
-    }
+        }
+        console.log(localLoading)
+    }, [checkActive, checkSaveActive])
 
     const getInputValue = (e) => {
         setInputValue(e.target.value)
@@ -57,24 +46,34 @@ function SearchForm({ searchMovies, addFilms, isSave, foundFilm }) {
 
     const searchMovie = (e) => {
         e.preventDefault();
-        localStorage.setItem('searchWord', inputValue)
-        if (inputValue === '') {
-            setErrorText('Нужно ввести ключевое слово')
-        } else {
-            if (getFilteredMovies(inputValue).length === 0) {
-                setErrorText('Ничего не найдено')
-                addFilms(getFilteredMovies(inputValue))
+        if (!isSave) {
+            console.log(getSearchedFilm)
+            if (inputValue === '') {
+                setErrorText('Нужно ввести ключевое слово')
             } else {
-                localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue)))
-                addFilms(getFilteredMovies(inputValue))
                 setErrorText('')
+                getFilteredMovies(inputValue, checkActive)
+                localStorage.setItem('searchWord', inputValue)
+            }
+        } else {
+            if (inputValue === '') {
+                setErrorText('Нужно ввести ключевое слово')
+            } else {
+                setErrorText('')
+                getFilteredMovies(inputValue, checkSaveActive)
+                console.log(errorMassage)
             }
         }
     }
 
     const checkBoxHandler = (isChecked) => {
+        setLocalLoading(true)
         setCheckActive(isChecked)
-        console.log(isChecked)
+    }
+
+    const saveCheckBoxHandler = (isChecked) => {
+        setLocalLoading(true)
+        setCheckSaveActive(isChecked)
     }
 
     return (
@@ -83,11 +82,11 @@ function SearchForm({ searchMovies, addFilms, isSave, foundFilm }) {
                 <div className="searchForm__search-container">
                     <img className="searchForm__img" alt='Лупа' src={search} />
                     <input onChange={getInputValue} value={inputValue} className="searchForm__input" type="text" placeholder="Фильм" />
-                    <span>{errorText}</span>
+                    <span>{errorText ? errorText : errorMassage}</span>
                     <button type='submit' className="searchForm__btn" />
                 </div>
                 <div className="searchForm__checkbox-container">
-                    <FilterCheckBox checkBoxHandler={checkBoxHandler} />
+                    <FilterCheckBox saveCheckBoxHandler={saveCheckBoxHandler} isSave={isSave} checkBoxHandler={checkBoxHandler} />
                     <span className="searchForm__description">Короткометражки</span>
                 </div>
             </div>

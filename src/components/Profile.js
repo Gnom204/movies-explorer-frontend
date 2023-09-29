@@ -29,7 +29,7 @@ function Profile({ logout, update, errorTextProfile }) {
         }
     }, [nameValid, emailValid])
 
-    const validateForm = (e) => {
+    const validateForm = (e, userName, userEmail) => {
         const { name, value } = e.target;
         if (name === "name") {
             if (!value) {
@@ -43,6 +43,12 @@ function Profile({ logout, update, errorTextProfile }) {
                 setErrors({
                     ...errors,
                     [name]: 'Длина имени должн абыть больше 4 символов'
+                })
+                setNameValid(false)
+            } if (userName === value) {
+                setErrors({
+                    ...errors,
+                    [name]: 'Данные совпадают с предыдущими'
                 })
                 setNameValid(false)
             } else {
@@ -67,6 +73,12 @@ function Profile({ logout, update, errorTextProfile }) {
                     [name]: 'Email не валиден, попробуйте использовать символ @'
                 })
                 setEmailValid(false)
+            } if (userEmail === value) {
+                setErrors({
+                    ...errors,
+                    [name]: 'Данные совпадают с предыдущими'
+                })
+                setEmailValid(false)
             } else {
                 setErrors({
                     ...errors,
@@ -78,14 +90,14 @@ function Profile({ logout, update, errorTextProfile }) {
         setErrorText('')
     }
 
-    const changeHandlerName = (e) => {
-        validateForm(e)
+    const changeHandlerName = (e, name, email) => {
+        console.log(name, email)
+        validateForm(e, name, email)
         setNameValue(e.target.value);
-        console.log(nameValue)
     }
 
-    const changeHandlerEmail = (e) => {
-        validateForm(e)
+    const changeHandlerEmail = (e, name, email) => {
+        validateForm(e, name, email)
         setEmailValue(e.target.value);
         console.log(emailValue)
     }
@@ -99,7 +111,6 @@ function Profile({ logout, update, errorTextProfile }) {
     const changeProfileHandler = () => {
         update(nameValue, emailValue)
         setIsEditing(false)
-        console.log(errorTextProfile)
     }
 
     return (
@@ -111,13 +122,13 @@ function Profile({ logout, update, errorTextProfile }) {
                     <form className="profile__form">
                         <div className="profile__input-container">
                             <label htmlFor="profileName" className="profile__annotation">Имя</label>
-                            <input name="name" disabled={!isEditing} onChange={changeHandlerName} id="profileName" placeholder="Введите имя" value={isEditing ? nameValue : name} className="profile__input" />
+                            <input name="name" disabled={!isEditing} onChange={(e) => changeHandlerName(e, name, email)} id="profileName" placeholder="Введите имя" value={isEditing ? nameValue : name} className="profile__input" />
                         </div>
                         <span className="profile__error">{errors.name}{errorText}</span>
                         <span className="profile__underline"></span>
                         <div className="profile__input-container">
                             <label htmlFor="profileEmail" className="profile__annotation">E-mail</label>
-                            <input name="email" disabled={!isEditing} onChange={changeHandlerEmail} id="profileEmail" placeholder="Введите почту" value={isEditing ? emailValue : email} className="profile__input" />
+                            <input name="email" disabled={!isEditing} onChange={(e) => changeHandlerEmail(e, name, email)} id="profileEmail" placeholder="Введите почту" value={isEditing ? emailValue : email} className="profile__input" />
                         </div>
                         <span className="profile__error">{errors.email}{errorText}</span>
                     </form>

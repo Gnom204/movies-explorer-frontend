@@ -22,11 +22,14 @@ function App() {
   const [errorText, setErrorText] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('loginStatus') || false);
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('userData')) || {});
-  const [foundFilm, setFoundFilm] = useState(JSON.parse(localStorage.getItem('movies')) || [])
+  const [foundFilm, setFoundFilm] = useState([])
   const [windowSize, setWindowSize] = useState(window.innerWidth)
   const [savedMovies, setSavedMovies] = useState(JSON.parse(localStorage.getItem('savedMovie')) || [])
   const [isLoading, setIsLoading] = useState(false);
   const [errorTextProfile, setErrorTextProfile] = useState('')
+  const [firstSearch, setFirstSearch] = useState(localStorage.getItem('firstSearch') || false)
+  const [errorMassage, setErrorMassage] = useState('')
+
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'))
@@ -34,6 +37,12 @@ function App() {
       setCurrentUser(userData)
     }
   }, [])
+
+  // useEffect(() => {
+  //   if (localStorage.getItem('movies') !== undefined) {
+  //     setFoundFilm(JSON.parse(localStorage.getItem('movies')))
+  //   }
+  // }, [])
 
   useEffect(() => {
     api.getMovies()
@@ -47,15 +56,6 @@ function App() {
     window.addEventListener("resize", handleResize)
   })
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      getMovies()
-        .then((data) => {
-          setSearchMovies(data)
-        })
-    } else return
-  }, [isLoggedIn])
-
   const handleResize = (e) => {
     setWindowSize(window.innerWidth)
   }
@@ -68,17 +68,65 @@ function App() {
     setNewSavedMovies(newSavedMovie)
   }
 
-  const addFilms = (movie, isSave) => {
-    if (isSave) {
-      return
+  const getSearchFilm = () => {
+    getMovies()
+      .then((movies) => {
+        setSearchMovies(movies)
+        setFirstSearch(true)
+        localStorage.setItem('firstSearch', firstSearch)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getFilteredMovies = (word, checkActive) => {
+    getMovies()
+      .then((movies) => {
+        setSearchMovies(movies)
+        setFirstSearch(true)
+        localStorage.setItem('firstSearch', firstSearch)
+
+        const newMovies = movies.filter(({ nameRU, nameEN, duration }) => {
+          if (checkActive === true && duration > 40) {
+            return false
+          } else if (checkActive && duration <= 40) {
+            return duration <= 40 && (nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase()))
+          }
+          return nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase())
+        })
+        localStorage.setItem('moviesData', JSON.stringify(newMovies))
+        setIsLoading(true)
+        if (newMovies.length === 0) {
+          setErrorMassage('Ничего не найдено')
+        } else {
+          setErrorMassage('')
+        }
+        setTimeout(() => {
+          setIsLoading(false)
+          setFoundFilm(newMovies)
+        }, 2000)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const getFilteredSaveMovies = (word, checkActive) => {
+    const newMovies = savedMovies.filter(({ nameRU, nameEN, duration }) => {
+      if (checkActive === true && duration > 40) {
+        return false
+      } else if (checkActive && duration <= 40) {
+        return duration <= 40 && (nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase()))
+      }
+      return nameRU.toLowerCase().includes(word.toLowerCase()) || nameEN.toLowerCase().includes(word.toLowerCase())
+    })
+    setIsLoading(true)
+    if (newMovies.length === 0) {
+      setErrorMassage('Ничего не найдено')
     } else {
-      setIsLoading(true);
-      localStorage.setItem('movies', JSON.stringify(movie))
-      setTimeout(() => {
-        setIsLoading(false)
-        setFoundFilm(movie)
-      }, 1000)
+      setErrorMassage('')
     }
+    setTimeout(() => {
+      setIsLoading(false)
+      setNewSavedMovies(newMovies)
+    }, 2000)
   }
 
   const test = ({ country, director, duration, year, description, nameRU, nameEN, id, trailerLink }, thumbnail, image) => {
@@ -103,10 +151,10 @@ function App() {
   }
 
   const onRegister = (name, email, password) => {
+    setErrorText('')
     console.log(name, email, password)
     api.register(name, email, password)
       .then((res) => {
-        setErrorText('')
         onLogin(email, password)
       })
       .catch(err => setErrorText('Пользователь уже существует'))
@@ -116,7 +164,9 @@ function App() {
     api.signout()
       .then((res) => {
         setIsLoggedIn(false);
+        setFoundFilm([])
         localStorage.clear()
+        console.log(res)
       })
   }
 
@@ -138,6 +188,7 @@ function App() {
   }
 
   const onLogin = (email, password) => {
+    setErrorText('')
     api.login(email, password)
       .then((res) => {
         setErrorText('')
@@ -164,13 +215,13 @@ function App() {
           <Route path='/movies' element={
             <>
               <Header isLoggedIn={isLoggedIn} />
-              <ProtectedRoute element={Movie} saveMovies={savedMovies} movieDelete={movieDelete} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={addFilms} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
+              <ProtectedRoute element={Movie} errorMassage={errorMassage} getSearchedFilm={getSearchFilm} firstSearch={firstSearch} getFilteredMovies={getFilteredMovies} saveMovies={savedMovies} movieDelete={movieDelete} isLoading={isLoading} windowSize={windowSize} movies={foundFilm} addFilms={setFoundFilm} addFavorite={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
               <Footer />
             </>
           } />
           <Route path='/saved-movies' element={<>
             <Header isLoggedIn={isLoggedIn} />
-            <ProtectedRoute element={SavedMovies} newMovies={savedMovies} movieDelete={movieDelete} windowSize={windowSize} movies={newSavedMovies} addFilms={searchSaveFilm} saveFilms={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
+            <ProtectedRoute getFilteredMovies={getFilteredSaveMovies} errorMassage={errorMassage} element={SavedMovies} isLoading={isLoading} newMovies={savedMovies} movieDelete={movieDelete} windowSize={windowSize} movies={newSavedMovies} addFilms={searchSaveFilm} saveFilms={saveFilms} searchMovies={searchMovies} isLoggedIn={isLoggedIn} />
             <Footer />
           </>} />
           <Route path='/profile' element={<>

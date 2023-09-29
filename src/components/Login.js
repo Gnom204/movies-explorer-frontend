@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom"
 function Login({ onLogin, errorText, setError }) {
     const validator = require('validator');
@@ -8,10 +8,27 @@ function Login({ onLogin, errorText, setError }) {
         email: '',
         password: ''
     });
+    const [valid, setValid] = useState({})
     const [submitDisabled, setSubmitDisabled] = useState(true);
+    const [isInput, setIsInput] = useState(false)
+    useEffect(() => {
+        if (valid.email && valid.password) {
+            setSubmitDisabled(false)
+        } else {
+            setSubmitDisabled(true)
+        }
+    }, [valid.email, valid.password])
+
+    useEffect(() => {
+        if (isInput === false && errorText) {
+            setSubmitDisabled(true)
+        } else {
+            setSubmitDisabled(false)
+        }
+    }, [isInput, errorText])
 
     const validateForm = (e) => {
-        let isValid = true;
+        setIsInput(true)
         const { name, value } = e.target
         if (name === 'email') {
             if (value === '') {
@@ -19,18 +36,19 @@ function Login({ onLogin, errorText, setError }) {
                     ...errors,
                     [name]: 'email должен быть длиннее 4 символов'
                 })
-                isValid = false
+                valid.email = false
             } else if (!validator.isEmail(value)) {
                 setErrors({
                     ...errors,
                     [name]: 'email записан неправильно, попробуйте использовать символ @'
                 })
-                isValid = false
+                valid.email = false
             } else {
                 setErrors({
                     ...errors,
                     [name]: ''
                 })
+                valid.email = true
             }
         }
         if (name === 'password') {
@@ -39,43 +57,21 @@ function Login({ onLogin, errorText, setError }) {
                     ...errors,
                     [name]: 'Пароль должен быть длиннее 4 символов'
                 })
-                isValid = false;
+                valid.password = false;
             } else {
                 setErrors({
                     ...errors,
                     [name]: ''
                 })
+                valid.password = true
             }
         }
-        setError('')
-        setSubmitDisabled(!isValid);
     };
 
-    const blurValidation = () => {
-        let errors = {}
-        let isValid = true
-        if (!email) {
-            setError('')
-            errors.email = 'Поле не должно быть пустым'
-            isValid = false
-        } if (!password) {
-            setError('')
-            errors.password = 'Поле не должно быть пустым'
-            isValid = false
-        }
-        setError('')
-        setErrors(errors)
-        setSubmitDisabled(!isValid)
-    }
-
-
     const handleSubmit = (e) => {
-        let errors = {}
+        setIsInput(false)
         e.preventDefault();
-        blurValidation()
-        if (Object.keys(errors).length === 0) {
-            onLogin(email, password)
-        }
+        onLogin(email, password)
     }
     return (
         <section className="login">
@@ -89,8 +85,8 @@ function Login({ onLogin, errorText, setError }) {
                             onChange={(e) => {
                                 setEmail(e.target.value);
                                 validateForm(e);
-                            }} onBlur={blurValidation} required name="email" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{errors.email}{errorText}</span>
+                            }} required name="email" className="authorization__input" />
+                        <span className="authorization__error authorization__validation-error">{errors.email}{isInput ? '' : errorText}</span>
                     </div>
                     <div className="authorization__input-container">
                         <label className="authorization__annotation">Пароль</label>
@@ -99,8 +95,8 @@ function Login({ onLogin, errorText, setError }) {
                             onChange={(e) => {
                                 setPassword(e.target.value);
                                 validateForm(e);
-                            }} onBlur={blurValidation} name="password" className="authorization__input" />
-                        <span className="authorization__error authorization__validation-error">{errors.password}{errorText}</span>
+                            }} name="password" className="authorization__input" />
+                        <span className="authorization__error authorization__validation-error">{errors.password}{isInput ? '' : errorText}</span>
                     </div>
                     <button disabled={submitDisabled} type="submit" className="authorization__button">Войти</button>
                     <div className="authorization__question-container">

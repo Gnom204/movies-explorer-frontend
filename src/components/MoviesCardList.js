@@ -2,28 +2,37 @@ import { useEffect, useState } from "react";
 import MoviesCard from "./MoviesCard";
 import Preloader from "./Preloader";
 
-function MoviesCardList({ movies, saveMovies, windowSize, isSave, addFavorite, isLoading, movieDelete }) {
+function MoviesCardList({ firstSearch, movies, saveMovies, windowSize, isSave, addFavorite, isLoading, movieDelete }) {
     const [moviesCount, setMoviesCount] = useState(16)
 
     console.log({ movies, saveMovies })
 
     useEffect(() => {
-        if (windowSize <= 4000 && windowSize > 768) {
+        if (windowSize <= 4000 && windowSize > 1319) {
             setMoviesCount(16)
         }
-        if (windowSize <= 480) {
+        if (windowSize <= 1319 && windowSize > 1030) {
+            setMoviesCount(12)
+        }
+        if (windowSize <= 739) {
             setMoviesCount(5)
         }
-        if (windowSize <= 768 && windowSize > 480) {
+        if (windowSize <= 1030 && windowSize > 739) {
             setMoviesCount(8)
         }
     }, [windowSize])
 
     const clickHandler = () => {
-        if (windowSize <= 4000 && windowSize >= 768) {
+        if (windowSize <= 4000 && windowSize >= 1319) {
             setMoviesCount(moviesCount + 4)
-            console.log(moviesCount)
-        } else if (windowSize <= 768) {
+        }
+        if (windowSize <= 1319 && windowSize > 1030) {
+            setMoviesCount(moviesCount + 3)
+        } if (windowSize <= 1030 && windowSize > 739) {
+            setMoviesCount(moviesCount + 4)
+        }
+
+        else if (windowSize <= 739) {
             setMoviesCount(moviesCount + 2)
         }
     }
@@ -47,19 +56,17 @@ function MoviesCardList({ movies, saveMovies, windowSize, isSave, addFavorite, i
         return saveMovies.some((savedMovie) => savedMovie.movieId === movie.id)
     }
 
-    const films = movies.slice(0, moviesCount).map((movie, index) => (
-        <MoviesCard changeHandler={() => handleCheckBoxChange(movie, movie.id)} isSaveCard={false} select={isSave ? '' : savedMoviesCheck(movie)} saveCard={isSave} saveLink={movie.image} index={movie._id} movieDelete={movieDelete} addFavorite={addFavorite} movie={movie} trailerLink={movie.trailerLink} key={movie.id} link={`https://api.nomoreparties.co/${movie.image.url}`} alt={movie.nameRU} name={movie.nameRU} time={getDuration(movie.duration)} />
-    ))
-
     return (
         <section className="movieCardList">
             {isLoading ? <Preloader /> :
                 <ul className="cardList">
-                    {films}
+                    {movies.slice(0, moviesCount).map((movie, index) => (
+                        <MoviesCard changeHandler={() => handleCheckBoxChange(movie, movie.id)} isSaveCard={false} select={isSave ? '' : savedMoviesCheck(movie)} saveCard={isSave} saveLink={movie.image} index={movie._id} movieDelete={movieDelete} addFavorite={addFavorite} movie={movie} trailerLink={movie.trailerLink} key={movie.id} link={`https://api.nomoreparties.co/${movie.image.url}`} alt={movie.nameRU} name={movie.nameRU} time={getDuration(movie.duration)} />
+                    ))}
                 </ul>
             }
             {
-                movies.length === 0 || isSave ? false : <button onClick={clickHandler} className="cardList__btn">Ещё</button>
+                firstSearch ? movies.length === 0 || isSave ? false : <button onClick={clickHandler} className="cardList__btn">Ещё</button> : false
             }
         </section>
     )

@@ -14,8 +14,8 @@ function Navigation(props) {
                     <>
                         <div style={active ? { display: 'flex' } : {}} className={`navigation__links ${active ? "navigation__links-active" : ""}`}>
                             <NavLink to='/' style={active ? { display: 'flex' } : { display: 'none' }} className={`navigation__link ${active ? "navigation__link-active" : ""}`}>Главная</NavLink>
-                            <NavLink to='/movies' className={`navigation__link ${active ? "navigation__link-active" : ""}`}>Фильмы</NavLink>
-                            <NavLink to='/saved-movies' className={`navigation__link ${active ? "navigation__link-active" : ""}`}>Сохранённые фильмы</NavLink>
+                            <NavLink to='/movies' style={({ isActive }) => ({ textDecoration: isActive ? 'underline' : 'none' })} className={`navigation__link ${active ? "navigation__link-active" : ""}`}>Фильмы</NavLink>
+                            <NavLink to='/saved-movies' style={({ isActive }) => ({ textDecoration: isActive ? 'underline' : 'none' })} className={`navigation__link ${active ? "navigation__link-active" : ""}`}>Сохранённые фильмы</NavLink>
                         </div>
                         <NavLink to='/profile' style={active ? { display: 'flex' } : {}} className="navigation__account">Аккаунт</NavLink>
 

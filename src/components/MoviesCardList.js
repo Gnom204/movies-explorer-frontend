@@ -8,6 +8,7 @@ function MoviesCardList({ firstSearch, processSearch, movies, saveMovies, window
 
     useEffect(() => {
         countControl()
+        getIsMaxMovies()
     }, [processSearch])
 
     useEffect(() => {

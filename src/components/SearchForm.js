@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import search from '../images/search.svg'
 import FilterCheckBox from './FilterCheckBox';
-function SearchForm({ searchMovies, errorMassage, getSearchedFilm, getFilteredMovies, addFilms, isSave, foundFilm }) {
+function SearchForm({ searchMovies, setProcessSearch, errorMassage, getSearchedFilm, getFilteredMovies, addFilms, isSave, foundFilm }) {
     const [errorText, setErrorText] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [checkActive, setCheckActive] = useState(localStorage.getItem('activeStatus') || false);
     const [checkSaveActive, setCheckSaveActive] = useState(false)
     const [localLoading, setLocalLoading] = useState(false)
+    const [isSearch, setIsSearch] = useState(false)
     // useEffect(() => {
     //     localStorage.setItem('moviesData', JSON.stringify(getFilteredMovies(inputValue, checkActive)))
     // }, [checkActive])
@@ -46,6 +47,8 @@ function SearchForm({ searchMovies, errorMassage, getSearchedFilm, getFilteredMo
 
     const searchMovie = (e) => {
         e.preventDefault();
+        setProcessSearch(!isSearch)
+        setIsSearch(!isSearch)
         if (!isSave) {
             console.log(getSearchedFilm)
             if (inputValue === '') {

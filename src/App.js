@@ -30,7 +30,6 @@ function App() {
   const [firstSearch, setFirstSearch] = useState(localStorage.getItem('firstSearch') || false)
   const [errorMassage, setErrorMassage] = useState('')
 
-
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'))
     if (userData) {

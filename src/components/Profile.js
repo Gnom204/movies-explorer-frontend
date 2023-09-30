@@ -29,6 +29,21 @@ function Profile({ logout, update, errorTextProfile }) {
         }
     }, [nameValid, emailValid])
 
+    const blurHandler = (e, userName, userEmail) => {
+        const { name, value } = e.target;
+        if (name === "name") {
+            if (value === userName) {
+                setErrorText('Данные не изменились')
+            }
+        } else if (name === "email") {
+            if (value === userEmail) {
+                setErrorText('Данные не изменились')
+            }
+        } else {
+            setErrorText('')
+        }
+    }
+
     const validateForm = (e, userName, userEmail) => {
         const { name, value } = e.target;
         console.log(errors)
@@ -101,7 +116,9 @@ function Profile({ logout, update, errorTextProfile }) {
         setEmailValue(e.target.value);
     }
 
-    const handleEdit = () => {
+    const handleEdit = (name, email) => {
+        setNameValue(name)
+        setEmailValue(email)
         setIsEditing(true)
         setErrorText('')
         setInputDisabled(!inputDisabled)
@@ -121,13 +138,13 @@ function Profile({ logout, update, errorTextProfile }) {
                     <form className="profile__form">
                         <div className="profile__input-container">
                             <label htmlFor="profileName" className="profile__annotation">Имя</label>
-                            <input name="name" disabled={!isEditing} onChange={(e) => changeHandlerName(e, name, email)} id="profileName" placeholder="Введите имя" value={isEditing ? nameValue : name} className="profile__input" />
+                            <input onClick={(e) => blurHandler(e, name, email)} name="name" disabled={!isEditing} onChange={(e) => changeHandlerName(e, name, email)} id="profileName" placeholder="Введите имя" value={isEditing ? nameValue : name} className="profile__input" />
                         </div>
                         <span className="profile__error">{errors.name}{errorText}</span>
                         <span className="profile__underline"></span>
                         <div className="profile__input-container">
                             <label htmlFor="profileEmail" className="profile__annotation">E-mail</label>
-                            <input name="email" disabled={!isEditing} onChange={(e) => changeHandlerEmail(e, name, email)} id="profileEmail" placeholder="Введите почту" value={isEditing ? emailValue : email} className="profile__input" />
+                            <input onClick={(e) => blurHandler(e, name, email)} name="email" disabled={!isEditing} onChange={(e) => changeHandlerEmail(e, name, email)} id="profileEmail" placeholder="Введите почту" value={isEditing ? emailValue : email} className="profile__input" />
                         </div>
                         <span className="profile__error">{errors.email}{errorText}</span>
                     </form>
@@ -135,7 +152,7 @@ function Profile({ logout, update, errorTextProfile }) {
                         isEditing ?
                             <button type="button" onClick={changeProfileHandler} disabled={btnDisabled} className="profile__button">Сохранить</button>
                             :
-                            <button type="button" onClick={handleEdit} className="profile__button">Редактировать</button>
+                            <button type="button" onClick={() => handleEdit(name, email)} className="profile__button">Редактировать</button>
 
                     }
                     <button onClick={logout} className="profile__button_warn profile__button">Выйти из аккаунта</button>

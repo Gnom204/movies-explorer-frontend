@@ -8,12 +8,15 @@ function MoviesCardList({ firstSearch, processSearch, movies, saveMovies, window
 
     useEffect(() => {
         countControl()
-        getIsMaxMovies()
     }, [processSearch])
 
     useEffect(() => {
         countControl()
     }, [windowSize])
+
+    useEffect(() => {
+        getIsMaxMovies()
+    }, [movies])
 
     useEffect(() => {
         getIsMaxMovies()
@@ -37,8 +40,10 @@ function MoviesCardList({ firstSearch, processSearch, movies, saveMovies, window
     const getIsMaxMovies = () => {
         if (movies.length <= moviesCount) {
             setIsMaxMovies(true)
+            console.log({ moviesL: movies.length, moviesCount })
         } else {
             setIsMaxMovies(false)
+            console.log({ moviesL: movies.length, moviesCount })
         }
     }
 

@@ -2,12 +2,23 @@ import { useEffect, useState } from "react";
 import MoviesCard from "./MoviesCard";
 import Preloader from "./Preloader";
 
-function MoviesCardList({ firstSearch, movies, saveMovies, windowSize, isSave, addFavorite, isLoading, movieDelete }) {
+function MoviesCardList({ firstSearch, processSearch, movies, saveMovies, windowSize, isSave, addFavorite, isLoading, movieDelete }) {
     const [moviesCount, setMoviesCount] = useState(16)
-
-    console.log({ movies, saveMovies })
+    const [isMaxMovies, setIsMaxMovies] = useState(true)
 
     useEffect(() => {
+        countControl()
+    }, [processSearch])
+
+    useEffect(() => {
+        countControl()
+    }, [windowSize])
+
+    useEffect(() => {
+        getIsMaxMovies()
+    }, [moviesCount])
+
+    const countControl = () => {
         if (windowSize <= 4000 && windowSize > 1319) {
             setMoviesCount(16)
         }
@@ -20,7 +31,15 @@ function MoviesCardList({ firstSearch, movies, saveMovies, windowSize, isSave, a
         if (windowSize <= 1030 && windowSize > 739) {
             setMoviesCount(8)
         }
-    }, [windowSize])
+    }
+
+    const getIsMaxMovies = () => {
+        if (movies.length <= moviesCount) {
+            setIsMaxMovies(true)
+        } else {
+            setIsMaxMovies(false)
+        }
+    }
 
     const clickHandler = () => {
         if (windowSize <= 4000 && windowSize >= 1319) {
@@ -31,10 +50,10 @@ function MoviesCardList({ firstSearch, movies, saveMovies, windowSize, isSave, a
         } if (windowSize <= 1030 && windowSize > 739) {
             setMoviesCount(moviesCount + 4)
         }
-
         else if (windowSize <= 739) {
             setMoviesCount(moviesCount + 2)
         }
+
     }
     const getDuration = (dur) => {
         let hours = Math.floor(dur / 60)
@@ -58,15 +77,20 @@ function MoviesCardList({ firstSearch, movies, saveMovies, windowSize, isSave, a
 
     return (
         <section className="movieCardList">
-            {isLoading ? <Preloader /> :
+            {isLoading ? <Preloader /> : !isSave ?
                 <ul className="cardList">
                     {movies.slice(0, moviesCount).map((movie, index) => (
+                        <MoviesCard changeHandler={() => handleCheckBoxChange(movie, movie.id)} isSaveCard={false} select={isSave ? '' : savedMoviesCheck(movie)} saveCard={isSave} saveLink={movie.image} index={movie._id} movieDelete={movieDelete} addFavorite={addFavorite} movie={movie} trailerLink={movie.trailerLink} key={movie.id} link={`https://api.nomoreparties.co/${movie.image.url}`} alt={movie.nameRU} name={movie.nameRU} time={getDuration(movie.duration)} />
+                    ))}
+                </ul> :
+                <ul className="cardList">
+                    {movies.map((movie, index) => (
                         <MoviesCard changeHandler={() => handleCheckBoxChange(movie, movie.id)} isSaveCard={false} select={isSave ? '' : savedMoviesCheck(movie)} saveCard={isSave} saveLink={movie.image} index={movie._id} movieDelete={movieDelete} addFavorite={addFavorite} movie={movie} trailerLink={movie.trailerLink} key={movie.id} link={`https://api.nomoreparties.co/${movie.image.url}`} alt={movie.nameRU} name={movie.nameRU} time={getDuration(movie.duration)} />
                     ))}
                 </ul>
             }
             {
-                firstSearch ? movies.length === 0 || isSave ? false : <button onClick={clickHandler} className="cardList__btn">Ещё</button> : false
+                firstSearch ? movies.length === 0 || isMaxMovies || isSave ? false : <button onClick={clickHandler} className="cardList__btn">Ещё</button> : false
             }
         </section>
     )

@@ -37,18 +37,14 @@ function App() {
     }
   }, [])
 
-  // useEffect(() => {
-  //   if (localStorage.getItem('movies') !== undefined) {
-  //     setFoundFilm(JSON.parse(localStorage.getItem('movies')))
-  //   }
-  // }, [])
-
   useEffect(() => {
     api.getMovies()
       .then((movies) => {
         setSavedMovies(movies)
         setNewSavedMovies(movies)
-      }).catch(err => console.log(err))
+      }).catch((err) => {
+        logout()
+      })
   }, [])
 
   useEffect(() => {
@@ -66,6 +62,7 @@ function App() {
   const movieDelete = (movieIndex) => {
     api.deleteMovie(movieIndex)
       .then((complete) => console.log('удалено', complete))
+      .catch((err) => { logout() })
     const newSavedMovie = savedMovies.filter((movie, index) => movie._id !== movieIndex)
     setSavedMovies(newSavedMovie)
     setNewSavedMovies(newSavedMovie)
@@ -138,19 +135,16 @@ function App() {
 
   const searchSaveFilm = (movie) => {
     setNewSavedMovies(movie)
-    console.log({ saved: savedMovies, newSaved: newSavedMovies, films: saveFilms })
   }
 
   const saveFilms = (movie) => {
-    console.log(movie)
     test(movie, movie.image.url, movie.image.url)
     api.addMovies(movie)
       .then((film) => {
         setSavedMovies([...savedMovies, film])
         setNewSavedMovies([...newSavedMovies, film])
       })
-      .catch((err) => console.log(err))
-    console.log('работает')
+      .catch((err) => logout())
   }
 
   const onRegister = (name, email, password) => {
@@ -174,19 +168,19 @@ function App() {
   }
 
   const updateUser = (name, email) => {
-    if (name === currentUser.name || email === currentUser.email) {
-      setErrorTextProfile('Введенные данные не изменились')
-      console.log(currentUser.email)
+    if (name === currentUser.name && email === currentUser.email) {
+      throw new Error('Данные не изменились')
     } else {
-      setErrorTextProfile('Данные успешнно изменены')
-      console.log(currentUser.email)
       api.updateProfile(name, email)
         .then((user) => {
+          setErrorTextProfile('')
           console.log(user)
           setCurrentUser(user)
           localStorage.setItem('userData', JSON.stringify(user))
         })
-        .catch(err => setErrorTextProfile('Пользователь с таким email уже существует'))
+        .catch((err) => {
+          logout()
+        })
     }
   }
 

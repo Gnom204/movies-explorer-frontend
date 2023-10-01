@@ -1,5 +1,6 @@
 import currentUserContext from "../utils/currentUserContext";
 import { useEffect, useState } from "react";
+import Notification from "./Notification";
 
 function Profile({ logout, update, errorTextProfile }) {
     const [nameValue, setNameValue] = useState('');
@@ -12,14 +13,29 @@ function Profile({ logout, update, errorTextProfile }) {
         name: '',
         email: ''
     })
-
+    const [isOpen, setIsOpen] = useState(false)
     const validator = require('validator')
     const [nameValid, setNameValid] = useState(false);
     const [emailValid, setEmailValid] = useState(false)
+    const [isNotChange, setIsNotChange] = useState(false)
 
     useEffect(() => {
         setErrorText(errorTextProfile)
     }, [errorTextProfile])
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsOpen(false)
+        }, 2000)
+    }, [isOpen])
+
+    useEffect(() => {
+        if (nameValid && emailValid) {
+            setBtnDisabled(false)
+        } else {
+            setBtnDisabled(true)
+        }
+    }, [])
 
     useEffect(() => {
         if (nameValid && emailValid) {
@@ -33,14 +49,26 @@ function Profile({ logout, update, errorTextProfile }) {
         const { name, value } = e.target;
         if (name === "name") {
             if (value === userName) {
-                setErrorText('Данные не изменились')
+                setErrors({
+                    ...errors,
+                    [name]: 'Данные не изменились'
+                })
+                setNameValid(false)
+            } else {
+                console.log({ value, userName })
+                setNameValid(true)
             }
-        } else if (name === "email") {
+        } if (name === "email") {
             if (value === userEmail) {
-                setErrorText('Данные не изменились')
+                setErrors({
+                    ...errors,
+                    [name]: 'Данные не изменились'
+                })
+                setEmailValid(false)
+                console.log({ value, userEmail })
+            } else {
+                setEmailValid(true)
             }
-        } else {
-            setErrorText('')
         }
     }
 
@@ -125,8 +153,16 @@ function Profile({ logout, update, errorTextProfile }) {
     }
 
     const changeProfileHandler = () => {
-        update(nameValue, emailValue)
-        setIsEditing(false)
+        try {
+            setIsNotChange(true)
+            update(nameValue, emailValue)
+            console.log({ nameValue, emailValue })
+            setIsOpen(true)
+            setIsEditing(false)
+        } catch {
+            setIsEditing(false)
+            setErrorText('Данные не изменились')
+        }
     }
 
     return (
@@ -134,6 +170,7 @@ function Profile({ logout, update, errorTextProfile }) {
             {({ name, email }) => (
 
                 <section className="profile">
+                    <Notification isNotChange={isNotChange} isOpen={isOpen} />
                     <h2 className="profile__heading">Привет, {name}!</h2>
                     <form className="profile__form">
                         <div className="profile__input-container">
@@ -157,6 +194,7 @@ function Profile({ logout, update, errorTextProfile }) {
                     }
                     <button onClick={logout} className="profile__button_warn profile__button">Выйти из аккаунта</button>
                 </section>
+
             )}
         </currentUserContext.Consumer>
 

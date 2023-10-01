@@ -9,17 +9,18 @@ function FilterCheckBox(props) {
             setClick(!click)
             localStorage.setItem('activeStatus', !click)
             props.checkBoxHandler(!click)
+            console.log(!click)
         } else {
             setSaveClick(!clickSave)
             props.saveCheckBoxHandler(!clickSave)
         }
     }
     return (
-        props.isSave ? <label htmlFor="filterCheckBox" onClick={onClicked} style={{ backgroundColor: clickSave ? '#2BE080' : '#EBEBEB' }} className='filterCheckBox' >
-            <input type="checkbox" name="filterCheckBox" checked={clickSave} onChange={onClicked} className={"filterCheckBox__circle"} id="filterCheckBox"></input>
+        props.isSave ? <label htmlFor="filterCheckBox" onChange={onClicked} style={{ backgroundColor: clickSave ? '#2BE080' : '#EBEBEB' }} className='filterCheckBox' >
+            <input type="checkbox" name="filterCheckBox" checked={clickSave} className={"filterCheckBox__circle"} id="filterCheckBox"></input>
         </label > :
-            <label htmlFor="filterCheckBox" onClick={onClicked} style={{ backgroundColor: click ? '#2BE080' : '#EBEBEB' }} className='filterCheckBox' >
-                <input type="checkbox" name="filterCheckBox" checked={click} onChange={onClicked} className={"filterCheckBox__circle"} id="filterCheckBox"></input>
+            <label htmlFor="filterCheckBox" onChange={onClicked} style={{ backgroundColor: click ? '#2BE080' : '#EBEBEB' }} className='filterCheckBox' >
+                <input type="checkbox" name="filterCheckBox" checked={click} className={"filterCheckBox__circle"} id="filterCheckBox"></input>
             </label >
     )
 }

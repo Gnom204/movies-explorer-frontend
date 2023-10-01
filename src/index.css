@@ -160,3 +160,7 @@
 @import url(./blocks/burger/__line-active/burger__line-active.css);
 /* Logo */
 @import url(./blocks/logo/logo.css);
+/* Notification */
+@import url(./blocks/notification/notification.css);
+@import url(./blocks/notification/__icon/notification__icon.css);
+@import url(./blocks/notification/__content/notification__content.css);

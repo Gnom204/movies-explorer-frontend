@@ -96,7 +96,8 @@ function MoviesCardList({ firstSearch, processSearch, movies, saveMovies, window
                 </ul>
             }
             {
-                firstSearch ? movies.length === 0 || isMaxMovies || isSave ? false : <button onClick={clickHandler} className="cardList__btn">Ещё</button> : false
+                isSave ? false :
+                    firstSearch ? movies.length === 0 || isMaxMovies ? false : <button onClick={clickHandler} className="cardList__btn">Ещё</button> : false
             }
         </section>
     )
